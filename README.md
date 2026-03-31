@@ -95,6 +95,10 @@ You (Telegram)
      │    Writes and edits code, fixes bugs,
      │    implements features exactly as specced
      │
+     ├──► Prof. Frink — Analyst
+     │    Analyzes proposed solutions and approaches,
+     │    evaluates trade-offs before the team commits
+     │
      └──► Todd Flanders — Researcher
           Web searches, reads docs, investigates
           errors, compares options and tools
@@ -102,7 +106,7 @@ You (Telegram)
 
 ### How sub-agents work
 
-Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system.
+Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits.
 
 ### MCP Integration
 
