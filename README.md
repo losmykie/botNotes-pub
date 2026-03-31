@@ -99,14 +99,20 @@ You (Telegram)
      │    Analyzes proposed solutions and approaches,
      │    evaluates trade-offs before the team commits
      │
-     └──► Todd Flanders — Researcher
-          Web searches, reads docs, investigates
-          errors, compares options and tools
+     ├──► Todd Flanders — Researcher
+     │    Web searches, reads docs, investigates
+     │    errors, compares options and tools
+     │
+     └──► Kirk Van Houten — Local Inference
+          Low-stakes text tasks via local Ollama model
+          (summaries, rewrites, formatting)
 ```
 
 ### How sub-agents work
 
-Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits.
+Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits. Kirk handles low-stakes text tasks via a local Ollama model — no cloud API needed.
+
+For multi-step tasks initiated via Telegram, Homer routes work through Ned, who sends live progress updates back to Telegram at each milestone.
 
 ### MCP Integration
 
@@ -122,6 +128,7 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 | YouTube analysis | OpenRouter | `deepseek/deepseek-v3.2` |
 | Podcast analysis | OpenRouter | `deepseek/deepseek-v3.2` |
 | Email / article summarization | Ollama (local) | `qwen3.5:9b` |
+| Agent text tasks (Kirk Van Houten) | Ollama (local) | `qwen3.5:9b` |
 | Dashboard TTS | Mistral API | `voxtral-mini-tts-2603` |
 
 ---
@@ -142,7 +149,7 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 ## Pipeline Detail
 
 ### News Briefing
-Runs hourly. Pulls unread articles from the article store, sends them to OpenRouter (Mistral), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5.
+Runs hourly. Pulls unread articles from the article store, sends them to OpenRouter (Mistral), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.
 
 ### YouTube Analyzer
 Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:
