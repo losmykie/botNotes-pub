@@ -25,7 +25,7 @@ flowchart TD
         CP --> PO
         YT --> WH[Whisper\nTranscription]
         PO --> WH
-        WH --> OR[Cloud LLM\nAnalysis]
+        WH --> OR[LLM\nAnalysis]
         GR --> OR
         SYS[System Monitor] --> MDB[(Metrics Store)]
         MDB --> EM[Metrics Reporter]
@@ -57,7 +57,7 @@ flowchart TD
 | **Shell** | bash — all scripts run directly, no containers |
 | **Python** | 3.14.3 — virtualenv at `.venv/` |
 | **Whisper** | CPU-only (`--device cpu`) — GPU is reserved for Ollama |
-| **Ollama** | Local inference server — `qwen3.5:9b` model |
+| **Ollama** | Local inference server — `gemma4:e2b` primary model |
 | **Cloud** | AWS (S3, DynamoDB, SES, Lambda, API Gateway) |
 
 ---
@@ -120,16 +120,19 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 
 ---
 
-## LLM Assignments
+## LLM Stack
 
 | Pipeline | Provider | Model |
 |---|---|---|
-| News briefings | OpenRouter | `mistralai/mistral-small-2603` |
-| YouTube analysis | OpenRouter | `deepseek/deepseek-v3.2` |
-| Podcast analysis | OpenRouter | `deepseek/deepseek-v3.2` |
-| Email / article summarization | Ollama (local) | `qwen3.5:9b` |
-| Agent text tasks (Kirk Van Houten) | Ollama (local) | `qwen3.5:9b` |
+| All pipelines (default) | Ollama (local) | `gemma4:e2b` |
+| Override (any pipeline) | OpenRouter | configurable via `LLM_PROVIDER` / `LLM_MODEL` env vars |
+| Agent text tasks (Kirk Van Houten) | Ollama (local) | `gemma4:e2b` |
 | Dashboard TTS | Mistral API | `voxtral-mini-tts-2603` |
+
+**Ollama models available locally:**
+- `gemma4:e2b` — primary model for all pipelines
+- `qwen3.5:9b` — available (legacy)
+- `ministral-3:3b` — available
 
 ---
 
@@ -140,7 +143,7 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 | Every minute | System Monitor | CPU / mem / disk / GPU → SQLite + DynamoDB |
 | Every 5 min | Email & URL Router | Polls inbox, routes URLs, summarizes articles |
 | Every 10 min | RSS Poller | Fetches new articles → SQLite + DynamoDB |
-| Every hour | News Briefing | OpenRouter analysis → S3 → DynamoDB → SES email |
+| Every hour | News Briefing | Ollama analysis → S3 → DynamoDB → SES email |
 | Every hour | Metrics Reporter | matplotlib charts → S3 → SES email |
 | Daily 4am | Podcast Monitor | Polls podcast feeds, routes new episodes |
 
@@ -149,7 +152,7 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 ## Pipeline Detail
 
 ### News Briefing
-Runs hourly. Pulls unread articles from the article store, sends them to OpenRouter (Mistral), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.
+Runs hourly. Pulls unread articles from the article store, sends them to the local Ollama model (`gemma4:e2b`), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.
 
 ### YouTube Analyzer
 Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:
@@ -157,27 +160,24 @@ Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:
 1. `yt-dlp` extracts the video title
 2. `yt-dlp` downloads auto-generated `.vtt` subtitles (English)
 3. If no subtitles exist, falls back to full Whisper transcription (CPU)
-4. Subtitle text is cleaned and sent to OpenRouter (DeepSeek v3.2) for structured analysis
+4. Subtitle text is cleaned and sent to the local LLM for structured analysis
 5. Output format: `# Title`, `## Summary & Key Takeaways`, `## Detailed Notes` with section headings
 6. Markdown committed to `_media/youtube/`, uploaded to S3, indexed in DynamoDB
 7. Styled HTML emailed via SES
+
+Pass `--music-video` to skip LLM analysis and route the download to the music catalog instead.
 
 ### Podcast Transcriber
 Triggered by an Apple Podcasts URL, direct audio URL, or the daily feed monitor. Full pipeline:
 
 1. `yt-dlp` downloads the audio file to a staging directory
 2. Whisper (`--device cpu`) transcribes — ~4–5 min for a 40-min episode
-3. Transcript sent to OpenRouter (DeepSeek v3.2) for structured analysis
+3. Transcript sent to the local LLM for structured analysis
 4. Output format: `# Show — Episode Title`, `## Summary & Key Takeaways`, then numbered topic sections
 5. Markdown committed to `_media/podcasts/`, uploaded to S3, indexed in DynamoDB
 6. Styled HTML emailed via SES
 
 Note: Whisper cold-start adds ~2 min. GPU runs CPU-only — occupied by Ollama.
-
-### Music Library (Sector7G Music tab)
-Music and music videos are stored in S3 and indexed in DynamoDB under category `music` / `music-video`. The Sector7G dashboard streams them directly via pre-signed S3 URLs.
-
-Each track record carries: `title`, `artist`, `file_type`, `size_bytes`, `date`, `filename`, `thumbnail_key`. The dashboard player supports audio-only toggle, video playback, and volume control.
 
 ### Email & URL Router
 Runs every 5 min. Polls a Gmail inbox via IMAP. Routes URLs to the correct pipeline (YouTube → YouTube Analyzer, podcast → Podcast Transcriber, articles → inline Ollama summary). Extracts calendar events and sends Telegram notifications.
@@ -197,9 +197,24 @@ Anything dropped in Telegram or emailed to the bot is auto-routed:
 | URL Pattern | Handler |
 |---|---|
 | `youtube.com` / `youtu.be` | YouTube Analyzer |
+| `youtube.com` / `youtu.be` + `--music-video` | Music catalog (no LLM analysis) |
 | `podcasts.apple.com` | Podcast Transcriber |
 | Direct audio URL (`.mp3`, `.m4a`, etc.) | Podcast Transcriber |
 | Any other article URL | Local LLM inline summary |
+
+---
+
+## Podcast Subscriptions
+
+Managed in `_config/podcast_subscriptions.json`.
+
+- The AI Daily Brief
+- The Sideload (9to5Google)
+- Leaders with Francine Lacqua
+- Bloomberg Businessweek
+- Bloomberg Tech
+- Pod Save America
+- The Daily (NYT)
 
 ---
 
@@ -287,6 +302,143 @@ Privacy-focused search engine. Deployed as AWS Lambda + API Gateway.
 
 ---
 
+## Setup
+
+### Prerequisites
+
+- Fedora Linux (or equivalent) — `python3`, `git`, `ffmpeg`, `yt-dlp` installed via package manager
+- Ollama running locally with `gemma4:e2b` pulled: `ollama pull gemma4:e2b`
+- AWS account with SES, S3, and DynamoDB configured
+- A Gmail account with an app password for IMAP access
+
+### Install Python dependencies
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Configure environment
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+# Email
+EMAIL_ADDRESS=your-bot@gmail.com
+EMAIL_APP_PASSWORD=your-app-password
+MY_EMAIL=your-personal@email.com
+
+# Telegram
+TELEGRAM_BOT_TOKEN=your-bot-token
+TELEGRAM_CHAT_ID=your-chat-id
+
+# AWS
+AWS_DEFAULT_REGION=us-east-1
+S3_BUCKET=YOUR_BUCKET_NAME
+DYNAMODB_REPORTS_TABLE=YOUR_TABLE_NAME
+DYNAMODB_METRICS_TABLE=YOUR_METRICS_TABLE_NAME
+
+# LLM override (optional — default is local Ollama)
+OPENROUTER=your-openrouter-key
+```
+
+### AWS resources needed
+
+| Service | Purpose |
+|---|---|
+| S3 bucket | Reports, transcripts, media storage |
+| S3 bucket (optional) | Music video catalog |
+| DynamoDB table | Report index (PK: `category`, SK: `timestamp#filename`) |
+| DynamoDB table | System metrics (PK: `machine`, SK: `timestamp`, TTL: 7 days) |
+| SES | Outbound email delivery (verify your sending domain) |
+| Lambda + API Gateway | Web dashboards (optional) |
+
+### Run manually
+
+```bash
+# News briefing
+python3 _scripts/generate_report.py
+
+# Process a YouTube video
+./_scripts/process_youtube.sh "https://youtube.com/watch?v=..."
+
+# Process a YouTube video as music (no LLM, routed to music catalog)
+./_scripts/process_youtube.sh --music-video "https://youtube.com/watch?v=..."
+
+# Process a podcast episode
+./_scripts/process_podcast.sh "https://podcasts.apple.com/..."
+
+# Check email
+python3 _scripts/check_email.py
+```
+
+### LLM override at runtime
+
+```bash
+LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_youtube.sh "<URL>"
+```
+
+### Cron setup
+
+```
+*/5 * * * *   /path/to/_scripts/check_email.py
+0 4 * * *     /path/to/_scripts/check_podcasts.py
+* * * * *     /path/to/_scripts/collect_metrics.py
+0 * * * *     /path/to/_scripts/email_metrics_report.py
+*/10 * * * *  /path/to/_scripts/poll_feeds.py
+0 * * * *     /path/to/_scripts/generate_report.py
+```
+
+---
+
+## Output Directories
+
+| Directory | Contents | Retention |
+|---|---|---|
+| `_reports/` | Hourly news briefing markdowns + logs | Latest 5 briefings kept |
+| `_media/podcasts/` | Podcast transcription + analysis | Latest 5 kept |
+| `_media/youtube/` | YouTube analysis notes | Latest 5 kept |
+| `_tmp/` | Staging area for downloads (gitignored) | Cleared after each run |
+| `_config/` | RSS feeds, podcast subscriptions, episode DB | Committed |
+
+---
+
+## Troubleshooting
+
+### No news briefing emails arriving
+1. Check cron log for errors
+2. Verify Ollama is running: `ollama list`
+3. Test Ollama model is available: `ollama run gemma4:e2b "hello"`
+4. Check SES send quota: `aws sesv2 get-account`
+5. Confirm DB has unread articles: `sqlite3 _reports/rss_articles.db "SELECT count(*) FROM articles WHERE reported_at IS NULL"`
+
+### Podcast/YouTube processing failing
+1. Run the script manually to see full output
+2. Test yt-dlp: `yt-dlp --print "%(title)s" "<URL>"`
+3. Verify Ollama is running and `gemma4:e2b` is loaded: `ollama list`
+4. Check `_tmp/` for leftover files from a failed run — clean them manually
+
+### Email monitor not routing URLs
+1. Check the email log
+2. Confirm IMAP credentials in `.env` are valid (Gmail app password, not account password)
+3. Run `python3 _scripts/check_email.py` manually
+
+### Metrics not appearing
+1. Confirm psutil is installed: `python3 -c "import psutil"`
+2. Check SQLite: `sqlite3 _reports/metrics.db "SELECT ts FROM metrics ORDER BY ts DESC LIMIT 5"`
+
+### Git push failing inside scripts
+1. Confirm SSH key is loaded: `ssh -T git@github.com`
+2. Check git remote: `git remote -v`
+
+### Ollama model slow or timing out
+- `gemma4:e2b` cold-start can take ~2 min; Ollama timeout is set to 300s
+- GPU is occupied by Ollama — Whisper must run with `--device cpu`
+- If Ollama is unresponsive: `systemctl restart ollama`
+
+---
+
 ## Recent Reports
 
 ### News Briefings
@@ -309,18 +461,6 @@ Privacy-focused search engine. Deployed as AWS Lambda + API Gateway.
 - [US Expands Threats to Iran Energy & Water Even as It Hails Talks](_media/podcasts/US_Expands_Threats_to_Iran_Energy_Water_Even_as_It_Hails_Talks.md)
 - [I Was Ruthless About Killing Complexity — HSBC CEO on Rewiring the Bank](_media/podcasts/I_Was_Ruthless_About_Killing_Complexity_HSBC_CEO_on_Rewiring_the_Bank.md)
 - [The State of AI Q2: AI's Second Moment](_media/podcasts/The_State_of_AI_Q2_AI_s_Second_Moment.md)
-
----
-
-## Output Directories
-
-| Directory | Contents | Retention |
-|---|---|---|
-| `_reports/` | Hourly news briefing markdowns + logs | Latest 5 briefings kept |
-| `_media/podcasts/` | Podcast transcription + analysis | Latest 5 kept |
-| `_media/youtube/` | YouTube analysis notes | Latest 5 kept |
-| `_tmp/` | Staging area for downloads (gitignored) | Cleared after each run |
-| `_config/` | RSS feeds, podcast subscriptions, episode DB | Committed |
 
 ---
 
