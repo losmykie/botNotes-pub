@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sector 7G Automated Intelligence System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #111827;
+            background: #FFFFFF;
+        }
+
+        header {
+            background: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .brand .accent { color: #8CE4FF; }
+
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 48px 24px 96px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-top: 40px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8CE4FF;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111827;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        p {
+            color: #374151;
+            margin-bottom: 14px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E5E7EB;
+            margin: 32px 0;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 14px;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #111827;
+            text-decoration-color: #8CE4FF;
+            text-underline-offset: 3px;
+        }
+
+        a:hover { color: #6B7280; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #E5E7EB;
+        }
+
+        th {
+            background: #F9FAFB;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #E5E7EB;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        strong { font-weight: 600; color: #111827; }
+        em { font-style: italic; color: #6B7280; }
+
+        blockquote {
+            border-left: 3px solid #E5E7EB;
+            padding: 4px 16px;
+            color: #6B7280;
+            font-style: italic;
+            margin: 14px 0;
+        }
+
+        .callout {
+            background: #F9FAFB;
+            border-left: 3px solid #8CE4FF;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+
+        pre {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        pre code {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        code {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            background: #F3F4F6;
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: #111827;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #9CA3AF;
+            padding: 32px 24px;
+            border-top: 1px solid #E5E7EB;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 640px) {
+            main { padding: 32px 16px 64px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
+    </header>
+    <main>
+        <h1>Sector 7G Automated Intelligence System</h1>
+<blockquote><p><em>"I am so smart. S-M-R-T." — Homer J. Simpson</em></p></blockquote>
+<p>A fully automated, 24/7 intelligence pipeline running on a home Linux server. Ingests RSS feeds, transcribes podcasts, analyzes YouTube videos, monitors email, and delivers formatted AI briefings via email and two custom web dashboards — all without touching a button.</p>
+<hr>
+<h2>System Architecture</h2>
+<pre><code>flowchart TD
+    subgraph Inputs
+        A[RSS Feeds] --&gt; PF[RSS Poller]
+        B[Telegram / Email] --&gt; CE[URL Router]
+        C[Podcast Feeds] --&gt; CP[Podcast Monitor]
+    end
+
+    subgraph Processing[&quot;Local Processing&quot;]
+        PF --&gt; DB[(Article Store)]
+        DB --&gt; GR[News Briefing]
+        CE --&gt;|YouTube URL| YT[YouTube Analyzer]
+        CE --&gt;|Podcast / Audio URL| PO[Podcast Transcriber]
+        CE --&gt;|Article URL| OL[Local LLM\nSummarizer]
+        CP --&gt; PO
+        YT --&gt; WH[Whisper\nTranscription]
+        PO --&gt; WH
+        WH --&gt; OR[LLM\nAnalysis]
+        GR --&gt; OR
+        SYS[System Monitor] --&gt; MDB[(Metrics Store)]
+        MDB --&gt; EM[Metrics Reporter]
+    end
+
+    subgraph Cloud[&quot;Cloud&quot;]
+        OR --&gt; S3[Object Storage]
+        S3 --&gt; DDB[(Report Database)]
+        S3 --&gt; SES[Email Delivery]
+        MDB --&gt; DDB2[(Metrics Database)]
+        EM --&gt; S3
+        EM --&gt; SES
+    end
+
+    subgraph Dashboards[&quot;Web Dashboards&quot;]
+        DDB --&gt; S7G[Reports &amp; RSS Dashboard]
+        DDB2 --&gt; S7G
+        EXT[Search API] --&gt; S7B[Search Engine]
+    end</code></pre>
+<hr>
+<h2>Infrastructure</h2>
+<table><thead><tr>
+<th>Component</th>
+<th>Details</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Host</strong></td>
+<td>Fedora Linux 43, kernel 6.19</td>
+</tr>
+<tr>
+<td><strong>Shell</strong></td>
+<td>bash — all scripts run directly, no containers</td>
+</tr>
+<tr>
+<td><strong>Python</strong></td>
+<td>3.14.3 — virtualenv at <code>.venv/</code></td>
+</tr>
+<tr>
+<td><strong>Whisper</strong></td>
+<td>CPU-only (<code>--device cpu</code>) — GPU is reserved for Ollama</td>
+</tr>
+<tr>
+<td><strong>Ollama</strong></td>
+<td>Local inference server — <code>gemma4:e2b</code> primary model</td>
+</tr>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>AWS (S3, DynamoDB, SES, Lambda, API Gateway)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>AI Operations — The Flanders Crew</h2>
+<p>The system is operated by <strong>Claude Code</strong> running as a persistent AI agent. For complex tasks, it spawns a team of specialized sub-agents — each with a defined role and a Simpsons character persona.</p>
+<pre><code>You (Telegram)
+     │
+     ▼
+┌──────────────────────────────────────────────────┐
+│  Homer (Claude Code — main agent)                │
+│  Reads Telegram via MCP, routes work,            │
+│  deploys code, manages repos                     │
+└──────────────────────────────────────────────────┘
+     │
+     ▼
+┌──────────────────────────────────────────────────┐
+│  Rev. Lovejoy — Overseer                         │
+│  High-stakes decisions, architectural review,    │
+│  final approval before major changes             │
+└──────────────────────────────────────────────────┘
+     │
+     ├──► Ned Flanders — Project Manager
+     │    Plans tasks, coordinates the team,
+     │    writes and maintains documentation
+     │
+     ├──► Maude Flanders — QA Tester
+     │    Tests code, finds bugs, validates outputs,
+     │    hunts edge cases — nothing ships broken
+     │
+     ├──► Rod Flanders — Developer
+     │    Writes and edits code, fixes bugs,
+     │    implements features exactly as specced
+     │
+     ├──► Prof. Frink — Analyst
+     │    Analyzes proposed solutions and approaches,
+     │    evaluates trade-offs before the team commits
+     │
+     ├──► Todd Flanders — Researcher
+     │    Web searches, reads docs, investigates
+     │    errors, compares options and tools
+     │
+     ├──► Kirk Van Houten — Text Tasks
+     │    Low-stakes text tasks — summaries, rewrites,
+     │    formatting (runs directly, no local model needed)
+     │
+     └──► Groundskeeper Willy — Security
+          Reviews all content before any public push,
+          hunts for secrets, internal URLs, and private info</code></pre>
+<h3>How sub-agents work</h3>
+<p>Sub-agents run in <strong>parallel</strong> when tasks are independent (e.g. Todd researching while Rod implements), and <strong>sequentially</strong> when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits. Kirk handles low-stakes text tasks (summaries, rewrites, formatting) directly. Groundskeeper Willy reviews all content before any public push — checking for emails, API keys, internal URLs, and private resource names.</p>
+<p>For multi-step tasks initiated via Telegram, Homer routes work through Ned, who sends live progress updates back to Telegram at each milestone.</p>
+<h3>MCP Integration</h3>
+<p>Claude connects to Telegram via the <code>plugin:telegram</code> MCP server. All replies, file attachments, and reactions go through the <code>reply</code> tool — Claude's text output is never shown directly in Telegram chat.</p>
+<hr>
+<h2>LLM Stack</h2>
+<table><thead><tr>
+<th>Pipeline</th>
+<th>Provider</th>
+<th>Model</th>
+</tr></thead><tbody>
+<tr>
+<td>News Briefing (<code>generate_report.py</code>)</td>
+<td>Ollama (local)</td>
+<td><code>qwen3.5:9b</code></td>
+</tr>
+<tr>
+<td>YouTube / Podcast / Email (default)</td>
+<td>Ollama (local)</td>
+<td><code>gemma4:e2b</code></td>
+</tr>
+<tr>
+<td>Override (any pipeline)</td>
+<td>OpenRouter</td>
+<td>configurable via <code>LLM_PROVIDER</code> / <code>LLM_MODEL</code> env vars</td>
+</tr>
+<tr>
+<td>Agent text tasks (Kirk Van Houten)</td>
+<td>Claude (sub-agent)</td>
+<td>direct — no local model needed</td>
+</tr>
+<tr>
+<td>Dashboard TTS</td>
+<td>Mistral API</td>
+<td><code>voxtral-mini-tts-2603</code></td>
+</tr>
+</tbody></table>
+<p><strong>Ollama models available locally:</strong></p>
+<ul>
+<li><code>gemma4:e2b</code> — primary model for YouTube, podcast, and email pipelines</li>
+<li><code>qwen3.5:9b</code> — news briefing model (large context window handles full article list)</li>
+<li><code>ministral-3:3b</code> — available</li>
+</ul>
+<hr>
+<h2>Cron Schedule</h2>
+<table><thead><tr>
+<th>Schedule</th>
+<th>Pipeline</th>
+<th>Description</th>
+</tr></thead><tbody>
+<tr>
+<td>Every minute</td>
+<td>System Monitor</td>
+<td>CPU / mem / disk / GPU → SQLite + DynamoDB</td>
+</tr>
+<tr>
+<td>Every 5 min</td>
+<td>Email & URL Router</td>
+<td>Polls inbox, routes URLs, summarizes articles</td>
+</tr>
+<tr>
+<td>Every 10 min</td>
+<td>RSS Poller</td>
+<td>Fetches new articles → SQLite + DynamoDB</td>
+</tr>
+<tr>
+<td>Every hour</td>
+<td>News Briefing</td>
+<td>Ollama analysis → S3 → DynamoDB → SES email</td>
+</tr>
+<tr>
+<td>Every hour</td>
+<td>Metrics Reporter</td>
+<td>matplotlib charts → S3 → SES email</td>
+</tr>
+<tr>
+<td>Daily 4am</td>
+<td>Podcast Monitor</td>
+<td>Polls podcast feeds, routes new episodes</td>
+</tr>
+<tr>
+<td>Daily 8am UTC</td>
+<td>KBBL Alerts</td>
+<td>Checks keyword alerts (Google News + Brave), emails digest if new results</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Pipeline Detail</h2>
+<h3>News Briefing</h3>
+<p>Runs hourly. Pulls unread articles from the article store, sends them to the local Ollama model (<code>qwen3.5:9b</code>), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.</p>
+<h3>YouTube Analyzer</h3>
+<p>Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:</p>
+<ol>
+<li><code>yt-dlp</code> extracts the video title</li>
+<li><code>yt-dlp</code> downloads auto-generated <code>.vtt</code> subtitles (English)</li>
+<li>If no subtitles exist, falls back to full Whisper transcription (CPU)</li>
+<li>Subtitle text is cleaned and sent to the local LLM for structured analysis</li>
+<li>Output format: <code># Title</code>, <code>## Summary &amp; Key Takeaways</code>, <code>## Detailed Notes</code> with section headings</li>
+<li>Markdown committed to <code>_media/youtube/</code>, uploaded to S3, indexed in DynamoDB</li>
+<li>Styled HTML emailed via SES</li>
+</ol>
+<p>Pass <code>--music-video</code> to skip LLM analysis and route the download to the music catalog instead.</p>
+<h3>Podcast Transcriber</h3>
+<p>Triggered by an Apple Podcasts URL, direct audio URL, or the daily feed monitor. Full pipeline:</p>
+<ol>
+<li><code>yt-dlp</code> downloads the audio file to a staging directory</li>
+<li>Whisper (<code>--device cpu</code>) transcribes — ~4–5 min for a 40-min episode</li>
+<li>Transcript sent to the local LLM for structured analysis</li>
+<li>Output format: <code># Show — Episode Title</code>, <code>## Summary &amp; Key Takeaways</code>, then numbered topic sections</li>
+<li>Markdown committed to <code>_media/podcasts/</code>, uploaded to S3, indexed in DynamoDB</li>
+<li>Styled HTML emailed via SES</li>
+</ol>
+<p>Note: Whisper cold-start adds ~2 min. GPU runs CPU-only — occupied by Ollama.</p>
+<h3>Email & URL Router</h3>
+<p>Runs every 5 min. Polls a Gmail inbox via IMAP. Routes URLs to the correct pipeline (YouTube → YouTube Analyzer, podcast → Podcast Transcriber, articles → inline Ollama summary). Extracts calendar events and sends Telegram notifications.</p>
+<h3>Podcast Feed Monitor</h3>
+<p>Runs daily at 4am. Polls podcast RSS feeds. On new episodes, routes to the Podcast Transcriber. Tracks processed episodes in a local SQLite DB.</p>
+<h3>System Metrics</h3>
+<p>Collects CPU, memory, disk, network, and GPU stats every minute into SQLite and DynamoDB (7-day TTL). Hourly, generates matplotlib charts, uploads to S3, and emails an HTML metrics report.</p>
+<hr>
+<h2>URL Routing</h2>
+<p>Anything dropped in Telegram or emailed to the bot is auto-routed:</p>
+<table><thead><tr>
+<th>URL Pattern</th>
+<th>Handler</th>
+</tr></thead><tbody>
+<tr>
+<td><code>youtube.com</code> / <code>youtu.be</code></td>
+<td>YouTube Analyzer</td>
+</tr>
+<tr>
+<td><code>youtube.com</code> / <code>youtu.be</code> + <code>--music-video</code></td>
+<td>Music catalog (no LLM analysis)</td>
+</tr>
+<tr>
+<td><code>podcasts.apple.com</code></td>
+<td>Podcast Transcriber</td>
+</tr>
+<tr>
+<td>Direct audio URL (<code>.mp3</code>, <code>.m4a</code>, etc.)</td>
+<td>Podcast Transcriber</td>
+</tr>
+<tr>
+<td>Any other article URL</td>
+<td>Local LLM inline summary</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Podcast Subscriptions</h2>
+<p>Managed in <code>_config/podcast_subscriptions.json</code>.</p>
+<ul>
+<li>The AI Daily Brief</li>
+<li>The Sideload (9to5Google)</li>
+<li>Leaders with Francine Lacqua</li>
+<li>Bloomberg Businessweek</li>
+<li>Bloomberg Tech</li>
+<li>Pod Save America</li>
+<li>The Daily (NYT)</li>
+</ul>
+<hr>
+<h2>Web Dashboards</h2>
+<h3>Sector7G</h3>
+<p>Reports and RSS reader dashboard. Deployed as AWS Lambda + API Gateway.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│  ⚡ SECTOR 7G    [Overview] [Reports] [RSS] [KBBL]   ⚙  🔔     │
+├─────────────────────────────────────────────────────────────────┤
+│  OVERVIEW                                                        │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐        │
+│  │  CPU 12% │  │ MEM 48% │  │ DISK 61% │  │  GPU 0%  │        │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘        │
+│  ┌─────────────────────────┐  ┌─────────────────────────┐       │
+│  │   CPU History (24h)     │  │   Memory History (24h)  │       │
+│  │  ▁▂▃▂▁▁▂▃▄▃▂▁▁▂▃▄▅▄▃▂ │  │  ▅▅▅▆▆▆▅▅▅▅▅▅▆▆▆▆▆▅▅▅  │       │
+│  └─────────────────────────┘  └─────────────────────────┘       │
+├─────────────────────────────────────────────────────────────────┤
+│  REPORTS                                                         │
+│  [News Briefings] [YouTube] [Podcasts]                          │
+│  ┌──────────────────┐  ┌────────────────────────────────────┐   │
+│  │ Mar 31 07:00     │  │ # Daily News Briefing — Mar 31     │   │
+│  │ Mar 31 06:00     │  │                                    │   │
+│  │ Mar 31 05:00  ●  │  │ ## Analysis &amp; Trends to Watch      │   │
+│  │ Mar 31 04:00     │  │ ...                                │   │
+│  │ Mar 31 03:00     │  │                        [🔊 Listen] │   │
+│  └──────────────────┘  └────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────┤
+│  RSS                                                             │
+│  ┌─ Feeds ─ + Add ‹ ─┐  ┌─ Articles ────┐  ┌─ Content ──────┐ │
+│  │ AWS News Blog  64 │  │ Article 1     │  │ Title          │ │
+│  │ Hacker News   459 │  │ Article 2     │  │ Published...   │ │
+│  │ BBC News      279 │  │ Article 3     │  │                │ │
+│  │ Bloomberg Mkt 747 │  │ Article 4     │  │ Summary text   │ │
+│  │ NPR Tech       17 │  │ Article 5     │  │                │ │
+│  └───────────────────┘  └───────────────┘  └────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>Features:</strong></p>
+<ul>
+<li>System metrics overview with live charts (CPU, memory, disk, GPU)</li>
+<li>Report browser for news briefings, YouTube analyses, and podcast notes</li>
+<li>TTS playback via Mistral Voxtral — reads "Summary & Key Takeaways" section only</li>
+<li>RSS reader with collapsible feed panel, article view, Kagi summarizer integration</li>
+<li>KBBL — Google Alerts clone: monitors keywords via Google News RSS and Brave News API, horizontal chip tab UI (mobile-optimized), daily email digest via SES when new results arrive</li>
+<li>Settings dropdown with dark mode (auto-follows system preference, manual override supported)</li>
+<li>All data served from DynamoDB + S3</li>
+</ul>
+<h3>Sector7B</h3>
+<p>Privacy-focused search engine. Deployed as AWS Lambda + API Gateway.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                         ⚡ SECTOR 7B                            │
+│                                                                  │
+│              ┌──────────────────────────────────┐               │
+│              │  🔍  Search anything...           │               │
+│              └──────────────────────────────────┘               │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │ Quick Answer                                              │  │
+│  │ ─────────────────────────────────────────────────────    │  │
+│  │  • Key point one about the query topic                   │  │
+│  │  • Key point two with supporting detail                  │  │
+│  │  • Key point three                            ▼ More     │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  Result Title                                [Kagi]       │  │
+│  │  result.domain.com                                        │  │
+│  │  Snippet of the result text showing context...            │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>Features:</strong></p>
+<ul>
+<li>Powered by Brave Search API</li>
+<li>Quick Answer box: AI-generated summary (first 60 words shown, expand to full)</li>
+<li>Kagi Summarizer button on each result (bullet points / digest format)</li>
+<li>Dark mode support</li>
+</ul>
+<hr>
+<h2>Setup</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li>Fedora Linux (or equivalent) — <code>python3</code>, <code>git</code>, <code>ffmpeg</code>, <code>yt-dlp</code> installed via package manager</li>
+<li>Ollama running locally with <code>gemma4:e2b</code> pulled: <code>ollama pull gemma4:e2b</code></li>
+<li>AWS account with SES, S3, and DynamoDB configured</li>
+<li>A Gmail account with an app password for IMAP access</li>
+</ul>
+<h3>Install Python dependencies</h3>
+<pre><code>python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</code></pre>
+<h3>Configure environment</h3>
+<p>Copy <code>.env.example</code> to <code>.env</code> and fill in your values:</p>
+<pre><code># Email
+EMAIL_ADDRESS=&lt;your-gmail-address&gt;
+EMAIL_APP_PASSWORD=&lt;your-app-password&gt;
+MY_EMAIL=&lt;your-personal-email&gt;
+
+# Telegram
+TELEGRAM_BOT_TOKEN=&lt;your-telegram-bot-token&gt;
+TELEGRAM_CHAT_ID=&lt;your-telegram-chat-id&gt;
+
+# AWS
+AWS_DEFAULT_REGION=us-east-1
+S3_BUCKET=&lt;your-s3-bucket-name&gt;
+DYNAMODB_REPORTS_TABLE=&lt;your-reports-table-name&gt;
+DYNAMODB_METRICS_TABLE=&lt;your-metrics-table-name&gt;
+
+# LLM override (optional — default is local Ollama)
+OPENROUTER=&lt;your-openrouter-api-key&gt;</code></pre>
+<h3>AWS resources needed</h3>
+<table><thead><tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td>S3 bucket</td>
+<td>Reports, transcripts, media storage</td>
+</tr>
+<tr>
+<td>S3 bucket (optional)</td>
+<td>Music video catalog</td>
+</tr>
+<tr>
+<td>DynamoDB table</td>
+<td>Report index (PK: <code>category</code>, SK: <code>timestamp#filename</code>)</td>
+</tr>
+<tr>
+<td>DynamoDB table</td>
+<td>System metrics (PK: <code>machine</code>, SK: <code>timestamp</code>, TTL: 7 days)</td>
+</tr>
+<tr>
+<td>SES</td>
+<td>Outbound email delivery (verify your sending domain)</td>
+</tr>
+<tr>
+<td>Lambda + API Gateway</td>
+<td>Web dashboards (optional)</td>
+</tr>
+</tbody></table>
+<h3>Run manually</h3>
+<pre><code># News briefing
+python3 _scripts/generate_report.py
+
+# Process a YouTube video
+./_scripts/process_youtube.sh &quot;https://youtube.com/watch?v=...&quot;
+
+# Process a YouTube video as music (no LLM, routed to music catalog)
+./_scripts/process_youtube.sh --music-video &quot;https://youtube.com/watch?v=...&quot;
+
+# Process a podcast episode
+./_scripts/process_podcast.sh &quot;https://podcasts.apple.com/...&quot;
+
+# Check email
+python3 _scripts/check_email.py</code></pre>
+<h3>LLM override at runtime</h3>
+<pre><code>LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_youtube.sh &quot;&lt;URL&gt;&quot;</code></pre>
+<h3>Cron setup</h3>
+<pre><code>*/5 * * * *   /path/to/_scripts/check_email.py
+0 4 * * *     /path/to/_scripts/check_podcasts.py
+* * * * *     /path/to/_scripts/collect_metrics.py
+0 * * * *     /path/to/_scripts/email_metrics_report.py
+*/10 * * * *  /path/to/_scripts/poll_feeds.py
+0 * * * *     /path/to/_scripts/generate_report.py
+0 8 * * *     /path/to/&lt;your-dashboard-repo&gt;/_scripts/alerts_cron.py   # KBBL alerts</code></pre>
+<hr>
+<h2>Output Directories</h2>
+<table><thead><tr>
+<th>Directory</th>
+<th>Contents</th>
+<th>Retention</th>
+</tr></thead><tbody>
+<tr>
+<td><code>_reports/</code></td>
+<td>Hourly news briefing markdowns + logs</td>
+<td>Latest 5 briefings kept</td>
+</tr>
+<tr>
+<td><code>_media/podcasts/</code></td>
+<td>Podcast transcription + analysis</td>
+<td>Latest 5 kept</td>
+</tr>
+<tr>
+<td><code>_media/youtube/</code></td>
+<td>YouTube analysis notes</td>
+<td>Latest 5 kept</td>
+</tr>
+<tr>
+<td><code>_tmp/</code></td>
+<td>Staging area for downloads (gitignored)</td>
+<td>Cleared after each run</td>
+</tr>
+<tr>
+<td><code>_config/</code></td>
+<td>RSS feeds, podcast subscriptions, episode DB</td>
+<td>Committed</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Troubleshooting</h2>
+<h3>No news briefing emails arriving</h3>
+<ol>
+<li>Check cron log for errors</li>
+<li>Verify Ollama is running: <code>ollama list</code></li>
+<li>Test Ollama model is available: <code>ollama run gemma4:e2b &quot;hello&quot;</code></li>
+<li>Check SES send quota: <code>aws sesv2 get-account</code></li>
+<li>Confirm DB has unread articles: <code>sqlite3 _reports/rss_articles.db &quot;SELECT count(*) FROM articles WHERE reported_at IS NULL&quot;</code></li>
+</ol>
+<h3>Podcast/YouTube processing failing</h3>
+<ol>
+<li>Run the script manually to see full output</li>
+<li>Test yt-dlp: <code>yt-dlp --print &quot;%(title)s&quot; &quot;&lt;URL&gt;&quot;</code></li>
+<li>Verify Ollama is running and <code>gemma4:e2b</code> is loaded: <code>ollama list</code></li>
+<li>Check <code>_tmp/</code> for leftover files from a failed run — clean them manually</li>
+</ol>
+<h3>Email monitor not routing URLs</h3>
+<ol>
+<li>Check the email log</li>
+<li>Confirm IMAP credentials in <code>.env</code> are valid (Gmail app password, not account password)</li>
+<li>Run <code>python3 _scripts/check_email.py</code> manually</li>
+</ol>
+<h3>Metrics not appearing</h3>
+<ol>
+<li>Confirm psutil is installed: <code>python3 -c &quot;import psutil&quot;</code></li>
+<li>Check SQLite: <code>sqlite3 _reports/metrics.db &quot;SELECT ts FROM metrics ORDER BY ts DESC LIMIT 5&quot;</code></li>
+</ol>
+<h3>Git push failing inside scripts</h3>
+<ol>
+<li>Confirm SSH key is loaded: <code>ssh -T git@github.com</code></li>
+<li>Check git remote: <code>git remote -v</code></li>
+</ol>
+<h3>Ollama model slow or timing out</h3>
+<ul>
+<li><code>gemma4:e2b</code> cold-start can take ~2 min; Ollama timeout is set to 300s</li>
+<li>GPU is occupied by Ollama — Whisper must run with <code>--device cpu</code></li>
+<li>If Ollama is unresponsive: <code>systemctl restart ollama</code></li>
+</ul>
+<hr>
+<h2>Recent Reports</h2>
+<p>Each item links to the styled HTML version (rendered via GitHub Pages). Raw markdown is also available alongside each file.</p>
+<p><strong>Pipeline guide:</strong> <a href="https://losmykie.github.io/botNotes-pub/PIPELINES.html">PIPELINES.html</a> — zero to MVP for all three pipelines.</p>
+<h3>News Briefings</h3>
+<ul>
+<li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1046.html">Daily News Briefing — April 25, 2026 10:46</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1045.html">Daily News Briefing — April 25, 2026 10:45</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1000.html">Daily News Briefing — April 25, 2026 10:00</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0900.html">Daily News Briefing — April 25, 2026 09:00</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0800.html">Daily News Briefing — April 25, 2026 08:00</a></li>
+</ul>
+<h3>YouTube Analyses</h3>
+<ul>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/TheQuartering_YouTube_s_Worst_Content_Creator.html">TheQuartering: YouTube's Worst Content Creator</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/The_Most_Dangerous_AI_Got_Hacked.html">The Most Dangerous AI Got Hacked</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/Why_does_bias_exist_in_AI_models.html">Why does bias exist in AI models?</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/Open_source_is_dead_now.html">Open source is dead now</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/Should_you_let_OpenClaw_pen_test_your_system_Plus_Cybersecurity_for_ephemeral_software.html">Should you let OpenClaw pen test your system? Plus Cybersecurity for ephemeral software</a></li>
+</ul>
+<h3>Podcast Notes</h3>
+<ul>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_s_View_of_the_War.html">Trump's View of the War</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_Loses_the_Gerrymander_War.html">Trump Loses the Gerrymander War</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Intel_Delivers_Strong_AI_Fueled_Outlook.html">Intel Delivers Strong AI-Fueled Outlook</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Women_Lose_Significant_Bone_Density_During_Menopause.html">Women Lose Significant Bone Density During Menopause</a></li>
+<li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/DOJ_Drops_Powell_Probe_Smoothing_Path_for_Warsh_to_Lead_Fed.html">DOJ Drops Powell Probe, Smoothing Path for Warsh to Lead Fed</a></li>
+</ul>
+<hr>
+<blockquote><p><em>"Every time I learn something new, it pushes some old stuff out of my brain." — Homer J. Simpson</em></p></blockquote>
+    </main>
+    <footer>Sector 7G Automated Intelligence System</footer>
+</body>
+</html>
