@@ -137,6 +137,16 @@
         strong { font-weight: 600; color: #111827; }
         em { font-style: italic; color: #6B7280; }
 
+        .anchor {
+            opacity: 0;
+            margin-left: 8px;
+            font-size: 0.75em;
+            color: #8CE4FF;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; }
+
         blockquote {
             border-left: 3px solid #E5E7EB;
             padding: 4px 16px;
@@ -200,10 +210,10 @@
         <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
     </header>
     <main>
-        <h1>botNotes Pipeline Specification</h1>
+        <h1 id="botnotes-pipeline-specification">botNotes Pipeline Specification<a class="anchor" href="#botnotes-pipeline-specification">#</a></h1>
 <blockquote><p>Context file for AI agents. Describes what exists, how it's wired, and why — enough to recreate it from scratch.</p></blockquote>
 <hr>
-<h2>Architecture Overview</h2>
+<h2 id="architecture-overview">Architecture Overview<a class="anchor" href="#architecture-overview">#</a></h2>
 <p>Three content pipelines feed into a shared cloud backend. Everything ingests locally, runs LLM analysis locally, then pushes output to AWS for email delivery, storage, and dashboard access.</p>
 <pre><code> INPUTS                    LOCAL (Linux server)              CLOUD (AWS)
  ─────────────────────     ───────────────────────────       ──────────────────────────
@@ -277,7 +287,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>Stack</h2>
+<h2 id="stack">Stack<a class="anchor" href="#stack">#</a></h2>
 <table><thead><tr>
 <th>Layer</th>
 <th>Technology</th>
@@ -316,7 +326,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>LLM Assignments</h2>
+<h2 id="llm-assignments">LLM Assignments<a class="anchor" href="#llm-assignments">#</a></h2>
 <table><thead><tr>
 <th>Pipeline</th>
 <th>Model</th>
@@ -345,7 +355,7 @@
 </tbody></table>
 <p>OpenRouter is a runtime override for any pipeline: <code>LLM_PROVIDER=openrouter LLM_MODEL=&lt;model&gt; ./_scripts/process_youtube.sh &quot;&lt;URL&gt;&quot;</code></p>
 <hr>
-<h2>Pipeline 1: News Briefing</h2>
+<h2 id="pipeline-1-news-briefing">Pipeline 1: News Briefing<a class="anchor" href="#pipeline-1-news-briefing">#</a></h2>
 <p><strong>File:</strong> <code>_scripts/generate_report.py</code> — runs hourly via cron</p>
 <p><strong>Inputs:</strong></p>
 <ul>
@@ -392,7 +402,7 @@
 transcripts/news-briefings/YYYY/MM/filename.txt   ← analysis text only
 articles/news-briefings/YYYY/MM/filename.json      ← full article index</code></pre>
 <hr>
-<h2>Pipeline 2: YouTube Analyzer</h2>
+<h2 id="pipeline-2-youtube-analyzer">Pipeline 2: YouTube Analyzer<a class="anchor" href="#pipeline-2-youtube-analyzer">#</a></h2>
 <p><strong>File:</strong> <code>_scripts/process_youtube.sh</code> — triggered by URL drop (Telegram or email)</p>
 <p><strong>Inputs:</strong> YouTube URL. Optional: <code>--music-video</code> flag routes to music catalog instead.</p>
 <p><strong>Process:</strong></p>
@@ -417,7 +427,7 @@ articles/news-briefings/YYYY/MM/filename.json      ← full article index</code>
 <pre><code>reports/youtube/safe_title.md
 transcripts/youtube/YYYY/MM/safe_title.txt</code></pre>
 <hr>
-<h2>Pipeline 3: Podcast Transcriber</h2>
+<h2 id="pipeline-3-podcast-transcriber">Pipeline 3: Podcast Transcriber<a class="anchor" href="#pipeline-3-podcast-transcriber">#</a></h2>
 <p><strong>File:</strong> <code>_scripts/process_podcast.sh</code> — triggered manually or by <code>check_podcasts.py</code> (daily 4am)</p>
 <p><strong>Inputs:</strong> Podcast URL (Apple Podcasts, direct <code>.mp3</code>/<code>.m4a</code>, or RSS enclosure). Optional env vars: <code>PODCAST_NAME</code>, <code>EPISODE_TITLE</code> (set by the feed monitor for clean titles).</p>
 <p><strong>Process:</strong></p>
@@ -451,22 +461,22 @@ transcripts/youtube/YYYY/MM/safe_title.txt</code></pre>
 <pre><code>reports/podcasts/safe_title.md
 transcripts/podcasts/YYYY/MM/safe_title.txt</code></pre>
 <hr>
-<h2>Shared Infrastructure</h2>
-<h3>DynamoDB — reports table</h3>
+<h2 id="shared-infrastructure">Shared Infrastructure<a class="anchor" href="#shared-infrastructure">#</a></h2>
+<h3 id="dynamodb-reports-table">DynamoDB — reports table<a class="anchor" href="#dynamodb-reports-table">#</a></h3>
 <pre><code>PK (String): category
   Values: &quot;news-briefings&quot; | &quot;youtube&quot; | &quot;podcasts&quot; | &quot;music-video&quot;
 
 SK (String): &quot;YYYY-MM-DDTHH:MM:SSZ#filename.md&quot;
 
 Fields: s3_key, title, date</code></pre>
-<h3>DynamoDB — RSS table</h3>
+<h3 id="dynamodb-rss-table">DynamoDB — RSS table<a class="anchor" href="#dynamodb-rss-table">#</a></h3>
 <pre><code>PK (String): feed     (feed name, e.g. &quot;Hacker News&quot;)
 SK (String): url_hash or timestamp-based key
 
 Fields: link, title, pub_date, description, fetched_at, reported_at</code></pre>
-<h3>RSS poller</h3>
+<h3 id="rss-poller">RSS poller<a class="anchor" href="#rss-poller">#</a></h3>
 <p><code>_scripts/poll_feeds.py</code> — runs every 10 min, reads <code>_config/rss_feeds.json</code>, writes new articles to the RSS DynamoDB table. The briefing generator reads from DDB, not feeds directly.</p>
-<h3>Email & URL router</h3>
+<h3 id="email-url-router">Email & URL router<a class="anchor" href="#email-url-router">#</a></h3>
 <p><code>_scripts/check_email.py</code> — runs every 5 min, polls Gmail via IMAP, routes URLs:</p>
 <table><thead><tr>
 <th>URL pattern</th>
@@ -489,9 +499,9 @@ Fields: link, title, pub_date, description, fetched_at, reported_at</code></pre>
 <td>inline Ollama summary via <code>gemma4:e2b</code></td>
 </tr>
 </tbody></table>
-<h3>Podcast feed monitor</h3>
+<h3 id="podcast-feed-monitor">Podcast feed monitor<a class="anchor" href="#podcast-feed-monitor">#</a></h3>
 <p><code>_scripts/check_podcasts.py</code> — daily 4am, polls <code>_config/podcast_subscriptions.json</code>, routes new episodes to <code>process_podcast.sh</code> with <code>PODCAST_NAME</code> + <code>EPISODE_TITLE</code> set.</p>
-<h3>Cron schedule</h3>
+<h3 id="cron-schedule">Cron schedule<a class="anchor" href="#cron-schedule">#</a></h3>
 <pre><code>*/5 * * * *   check_email.py
 */10 * * * *  poll_feeds.py
 0 * * * *     generate_report.py
@@ -500,7 +510,7 @@ Fields: link, title, pub_date, description, fetched_at, reported_at</code></pre>
 0 4 * * *     check_podcasts.py
 0 8 * * *     alerts_cron.py   ← KBBL alerts (separate service)</code></pre>
 <hr>
-<h2>Environment Variables</h2>
+<h2 id="environment-variables">Environment Variables<a class="anchor" href="#environment-variables">#</a></h2>
 <pre><code>EMAIL_ADDRESS=&lt;gmail address for the bot inbox&gt;
 EMAIL_APP_PASSWORD=&lt;gmail app password&gt;
 MY_EMAIL=&lt;destination email for all output&gt;
@@ -511,7 +521,7 @@ OPENROUTER=&lt;openrouter api key&gt;
 AWS_DEFAULT_REGION=us-east-1</code></pre>
 <p>AWS credentials live in <code>~/.aws/credentials</code> (standard profile). All scripts assume <code>us-east-1</code> unless noted.</p>
 <hr>
-<h2>Key Design Decisions</h2>
+<h2 id="key-design-decisions">Key Design Decisions<a class="anchor" href="#key-design-decisions">#</a></h2>
 <p><strong>Whisper must be CPU-only.</strong> The GPU runs Ollama full-time. Running both on GPU causes OOM. Flag: <code>--device cpu</code>.</p>
 <p><strong>qwen3.5:9b is non-negotiable for the briefing.</strong> A full article list (50-100 items) exceeds <code>gemma4:e2b</code>'s effective context. Smaller model hallucinates or truncates.</p>
 <p><strong>Citation validation is critical.</strong> Without the hallucination filter (strip bullets with out-of-range <code>[N]</code>), the model invents plausible-sounding but fabricated stories at ~1 in 10 runs.</p>

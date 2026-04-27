@@ -137,6 +137,16 @@
         strong { font-weight: 600; color: #111827; }
         em { font-style: italic; color: #6B7280; }
 
+        .anchor {
+            opacity: 0;
+            margin-left: 8px;
+            font-size: 0.75em;
+            color: #8CE4FF;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; }
+
         blockquote {
             border-left: 3px solid #E5E7EB;
             padding: 4px 16px;
@@ -200,8 +210,8 @@
         <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
     </header>
     <main>
-        <h1>Open source is dead now?</h1>
-<h2>Summary & Key Takeaways</h2>
+        <h1 id="open-source-is-dead-now">Open source is dead now?<a class="anchor" href="#open-source-is-dead-now">#</a></h1>
+<h2 id="summary-key-takeaways">Summary & Key Takeaways<a class="anchor" href="#summary-key-takeaways">#</a></h2>
 <ul>
 <li>The speaker is a stronger advocate for <strong>open source</strong> and the importance of supporting open source communities and building systems that can build on top of each other.</li>
 <li>The speaker is concerned about the possibility of <strong>open source</strong> being shut down, citing the example of <strong>Cal.com</strong> closing its source code.</li>
@@ -209,36 +219,36 @@
 <li>The interaction between <strong>AI</strong> and security research is changing the landscape, potentially lowering the barrier for finding exploits, which is scary.</li>
 <li>The future of security may involve a system where <strong>cybersecurity</strong> is framed as <strong>proof of work</strong>, requiring spending more tokens to find exploits.</li>
 </ul>
-<h2>Detailed Notes</h2>
-<h3>The Cal.com Example</h3>
+<h2 id="detailed-notes">Detailed Notes<a class="anchor" href="#detailed-notes">#</a></h2>
+<h3 id="the-calcom-example">The Cal.com Example<a class="anchor" href="#the-calcom-example">#</a></h3>
 <ul>
 <li><strong>Cal.com</strong> is an open-source alternative to Calendarly, and it is no longer open source.</li>
 <li><strong>Cal.com</strong> is cited as an example of a good <strong>full-stack TypeScript</strong> application and a leading example of a big <strong>open-source fullstack TypeScript next app</strong>.</li>
 <li>The speaker expresses fear that closing the source code of such projects might doom the future of software.</li>
 <li>The speaker has discussed this issue with the <strong>Cal.com</strong> team and has failed to prevent the change.</li>
 </ul>
-<h3>The Shift in Security and AI</h3>
+<h3 id="the-shift-in-security-and-ai">The Shift in Security and AI<a class="anchor" href="#the-shift-in-security-and-ai">#</a></h3>
 <ul>
 <li><strong>AI</strong> has fundamentally altered the security landscape by allowing security tasks to be automated at scale.</li>
 <li>Code is no longer just read; it is scanned, mapped, and exploited at near zero cost, making transparency a risk at scale.</li>
 <li>The decision to close the <strong>corec.com</strong> codebase is framed as a response to the risks <strong>AI</strong> is making possible, not a rejection of <strong>open source</strong>.</li>
 <li>The speaker points to <strong>Project Glass Wing</strong> as something worth considering in this context.</li>
 </ul>
-<h3>The Role of Domain Knowledge and AI</h3>
+<h3 id="the-role-of-domain-knowledge-and-ai">The Role of Domain Knowledge and AI<a class="anchor" href="#the-role-of-domain-knowledge-and-ai">#</a></h3>
 <ul>
 <li>Finding exploits requires both <strong>security knowledge</strong> and <strong>domain-specific knowledge</strong>.</li>
 <li>Historically, the lack of knowledge in one area (like full-stack TypeScript) meant that open source didn't meaningfully change the average security researcher's capability in that domain.</li>
 <li><strong>AI</strong> can now bridge this gap: it can understand the domain-specific stuff, meaning the barrier for finding exploits is shifting from requiring high domain knowledge to requiring more <strong>security knowledge</strong>.</li>
 <li>The speaker notes that the AI has made the amount of domain-specific knowledge hit a floor, and the only remaining blocker is <strong>security knowledge</strong>.</li>
 </ul>
-<h3>The Proof of Work in Cybersecurity</h3>
+<h3 id="the-proof-of-work-in-cybersecurity">The Proof of Work in Cybersecurity<a class="anchor" href="#the-proof-of-work-in-cybersecurity">#</a></h3>
 <ul>
 <li>The speaker introduces the concept of <strong>cybersecurity</strong> looking like <strong>proof of work</strong>.</li>
 <li>This concept suggests that security requires spending more tokens to discover exploits than attackers spend trying to exploit them.</li>
 <li>This mirrors <strong>cryptocurrency's proof of work</strong>, where success is tied to raw computational work.</li>
 <li>The goal is to make attacking a service expensive by requiring real processing power to prove the work.</li>
 </ul>
-<h3>Open Source and Future Efforts</h3>
+<h3 id="open-source-and-future-efforts">Open Source and Future Efforts<a class="anchor" href="#open-source-and-future-efforts">#</a></h3>
 <ul>
 <li>The speaker argues that <strong>open source</strong> remains critically important and needs to be supported.</li>
 <li><strong>Open source</strong> projects face an additional burden to deal with security reports, which is "thankless work."</li>

@@ -145,6 +145,16 @@ HTML_TEMPLATE = """\
         strong {{ font-weight: 600; color: #111827; }}
         em {{ font-style: italic; color: #6B7280; }}
 
+        .anchor {{
+            opacity: 0;
+            margin-left: 8px;
+            font-size: 0.75em;
+            color: #8CE4FF;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }}
+        h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor {{ opacity: 1; }}
+
         blockquote {{
             border-left: 3px solid #E5E7EB;
             padding: 4px 16px;
@@ -215,6 +225,11 @@ HTML_TEMPLATE = """\
 </html>"""
 
 
+def slugify(text: str) -> str:
+    text = re.sub(r'[^\w\s-]', '', text.lower())
+    return re.sub(r'[\s_]+', '-', text).strip('-')
+
+
 def inline_fmt(text: str) -> str:
     import html as _html
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
@@ -231,6 +246,7 @@ def convert_md(md: str) -> tuple:
     lines = md.split('\n')
     out = []
     title = ''
+    slug_counts: dict[str, int] = {}
     in_list = False
     list_tag = ''
     in_table = False
@@ -292,25 +308,41 @@ def convert_md(md: str) -> tuple:
 
         if s.startswith('# ') and not s.startswith('## '):
             close_list(); close_table()
-            t = inline_fmt(s[2:])
+            raw = s[2:]
+            t = inline_fmt(raw)
             if not title:
-                title = s[2:]
-            out.append(f'<h1>{t}</h1>')
+                title = raw
+            base = slugify(raw)
+            slug_counts[base] = n = slug_counts.get(base, 0) + 1
+            sid = base if n == 1 else f'{base}-{n}'
+            out.append(f'<h1 id="{sid}">{t}<a class="anchor" href="#{sid}">#</a></h1>')
             continue
 
         if s.startswith('## ') and not s.startswith('### '):
             close_list(); close_table()
-            out.append(f'<h2>{inline_fmt(s[3:])}</h2>')
+            raw = s[3:]
+            base = slugify(raw)
+            slug_counts[base] = n = slug_counts.get(base, 0) + 1
+            sid = base if n == 1 else f'{base}-{n}'
+            out.append(f'<h2 id="{sid}">{inline_fmt(raw)}<a class="anchor" href="#{sid}">#</a></h2>')
             continue
 
         if s.startswith('### ') and not s.startswith('#### '):
             close_list(); close_table()
-            out.append(f'<h3>{inline_fmt(s[4:])}</h3>')
+            raw = s[4:]
+            base = slugify(raw)
+            slug_counts[base] = n = slug_counts.get(base, 0) + 1
+            sid = base if n == 1 else f'{base}-{n}'
+            out.append(f'<h3 id="{sid}">{inline_fmt(raw)}<a class="anchor" href="#{sid}">#</a></h3>')
             continue
 
         if s.startswith('#### '):
             close_list(); close_table()
-            out.append(f'<h4>{inline_fmt(s[5:])}</h4>')
+            raw = s[5:]
+            base = slugify(raw)
+            slug_counts[base] = n = slug_counts.get(base, 0) + 1
+            sid = base if n == 1 else f'{base}-{n}'
+            out.append(f'<h4 id="{sid}">{inline_fmt(raw)}<a class="anchor" href="#{sid}">#</a></h4>')
             continue
 
         # Table row

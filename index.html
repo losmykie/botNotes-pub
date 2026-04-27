@@ -137,6 +137,16 @@
         strong { font-weight: 600; color: #111827; }
         em { font-style: italic; color: #6B7280; }
 
+        .anchor {
+            opacity: 0;
+            margin-left: 8px;
+            font-size: 0.75em;
+            color: #8CE4FF;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; }
+
         blockquote {
             border-left: 3px solid #E5E7EB;
             padding: 4px 16px;
@@ -200,11 +210,11 @@
         <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
     </header>
     <main>
-        <h1>Sector 7G Automated Intelligence System</h1>
+        <h1 id="sector-7g-automated-intelligence-system">Sector 7G Automated Intelligence System<a class="anchor" href="#sector-7g-automated-intelligence-system">#</a></h1>
 <blockquote><p><em>"I am so smart. S-M-R-T." — Homer J. Simpson</em></p></blockquote>
 <p>A fully automated, 24/7 intelligence pipeline running on a home Linux server. Ingests RSS feeds, transcribes podcasts, analyzes YouTube videos, monitors email, and delivers formatted AI briefings via email and two custom web dashboards — all without touching a button.</p>
 <hr>
-<h2>System Architecture</h2>
+<h2 id="system-architecture">System Architecture<a class="anchor" href="#system-architecture">#</a></h2>
 <pre><code>flowchart TD
     subgraph Inputs
         A[RSS Feeds] --&gt; PF[RSS Poller]
@@ -242,7 +252,7 @@
         EXT[Search API] --&gt; S7B[Search Engine]
     end</code></pre>
 <hr>
-<h2>Infrastructure</h2>
+<h2 id="infrastructure">Infrastructure<a class="anchor" href="#infrastructure">#</a></h2>
 <table><thead><tr>
 <th>Component</th>
 <th>Details</th>
@@ -273,7 +283,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>AI Operations — The Flanders Crew</h2>
+<h2 id="ai-operations-the-flanders-crew">AI Operations — The Flanders Crew<a class="anchor" href="#ai-operations-the-flanders-crew">#</a></h2>
 <p>The system is operated by <strong>Claude Code</strong> running as a persistent AI agent. For complex tasks, it spawns a team of specialized sub-agents — each with a defined role and a Simpsons character persona.</p>
 <pre><code>You (Telegram)
      │
@@ -318,13 +328,13 @@
      └──► Groundskeeper Willy — Security
           Reviews all content before any public push,
           hunts for secrets, internal URLs, and private info</code></pre>
-<h3>How sub-agents work</h3>
+<h3 id="how-sub-agents-work">How sub-agents work<a class="anchor" href="#how-sub-agents-work">#</a></h3>
 <p>Sub-agents run in <strong>parallel</strong> when tasks are independent (e.g. Todd researching while Rod implements), and <strong>sequentially</strong> when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits. Kirk handles low-stakes text tasks (summaries, rewrites, formatting) directly. Groundskeeper Willy reviews all content before any public push — checking for emails, API keys, internal URLs, and private resource names.</p>
 <p>For multi-step tasks initiated via Telegram, Homer routes work through Ned, who sends live progress updates back to Telegram at each milestone.</p>
-<h3>MCP Integration</h3>
+<h3 id="mcp-integration">MCP Integration<a class="anchor" href="#mcp-integration">#</a></h3>
 <p>Claude connects to Telegram via the <code>plugin:telegram</code> MCP server. All replies, file attachments, and reactions go through the <code>reply</code> tool — Claude's text output is never shown directly in Telegram chat.</p>
 <hr>
-<h2>LLM Stack</h2>
+<h2 id="llm-stack">LLM Stack<a class="anchor" href="#llm-stack">#</a></h2>
 <table><thead><tr>
 <th>Pipeline</th>
 <th>Provider</th>
@@ -363,7 +373,7 @@
 <li><code>ministral-3:3b</code> — available</li>
 </ul>
 <hr>
-<h2>Cron Schedule</h2>
+<h2 id="cron-schedule">Cron Schedule<a class="anchor" href="#cron-schedule">#</a></h2>
 <table><thead><tr>
 <th>Schedule</th>
 <th>Pipeline</th>
@@ -406,10 +416,10 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>Pipeline Detail</h2>
-<h3>News Briefing</h3>
+<h2 id="pipeline-detail">Pipeline Detail<a class="anchor" href="#pipeline-detail">#</a></h2>
+<h3 id="news-briefing">News Briefing<a class="anchor" href="#news-briefing">#</a></h3>
 <p>Runs hourly. Pulls unread articles from the article store, sends them to the local Ollama model (<code>qwen3.5:9b</code>), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.</p>
-<h3>YouTube Analyzer</h3>
+<h3 id="youtube-analyzer">YouTube Analyzer<a class="anchor" href="#youtube-analyzer">#</a></h3>
 <p>Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:</p>
 <ol>
 <li><code>yt-dlp</code> extracts the video title</li>
@@ -421,7 +431,7 @@
 <li>Styled HTML emailed via SES</li>
 </ol>
 <p>Pass <code>--music-video</code> to skip LLM analysis and route the download to the music catalog instead.</p>
-<h3>Podcast Transcriber</h3>
+<h3 id="podcast-transcriber">Podcast Transcriber<a class="anchor" href="#podcast-transcriber">#</a></h3>
 <p>Triggered by an Apple Podcasts URL, direct audio URL, or the daily feed monitor. Full pipeline:</p>
 <ol>
 <li><code>yt-dlp</code> downloads the audio file to a staging directory</li>
@@ -432,14 +442,14 @@
 <li>Styled HTML emailed via SES</li>
 </ol>
 <p>Note: Whisper cold-start adds ~2 min. GPU runs CPU-only — occupied by Ollama.</p>
-<h3>Email & URL Router</h3>
+<h3 id="email-url-router">Email & URL Router<a class="anchor" href="#email-url-router">#</a></h3>
 <p>Runs every 5 min. Polls a Gmail inbox via IMAP. Routes URLs to the correct pipeline (YouTube → YouTube Analyzer, podcast → Podcast Transcriber, articles → inline Ollama summary). Extracts calendar events and sends Telegram notifications.</p>
-<h3>Podcast Feed Monitor</h3>
+<h3 id="podcast-feed-monitor">Podcast Feed Monitor<a class="anchor" href="#podcast-feed-monitor">#</a></h3>
 <p>Runs daily at 4am. Polls podcast RSS feeds. On new episodes, routes to the Podcast Transcriber. Tracks processed episodes in a local SQLite DB.</p>
-<h3>System Metrics</h3>
+<h3 id="system-metrics">System Metrics<a class="anchor" href="#system-metrics">#</a></h3>
 <p>Collects CPU, memory, disk, network, and GPU stats every minute into SQLite and DynamoDB (7-day TTL). Hourly, generates matplotlib charts, uploads to S3, and emails an HTML metrics report.</p>
 <hr>
-<h2>URL Routing</h2>
+<h2 id="url-routing">URL Routing<a class="anchor" href="#url-routing">#</a></h2>
 <p>Anything dropped in Telegram or emailed to the bot is auto-routed:</p>
 <table><thead><tr>
 <th>URL Pattern</th>
@@ -467,7 +477,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>Podcast Subscriptions</h2>
+<h2 id="podcast-subscriptions">Podcast Subscriptions<a class="anchor" href="#podcast-subscriptions">#</a></h2>
 <p>Managed in <code>_config/podcast_subscriptions.json</code>.</p>
 <ul>
 <li>The AI Daily Brief</li>
@@ -479,8 +489,8 @@
 <li>The Daily (NYT)</li>
 </ul>
 <hr>
-<h2>Web Dashboards</h2>
-<h3>Sector7G</h3>
+<h2 id="web-dashboards">Web Dashboards<a class="anchor" href="#web-dashboards">#</a></h2>
+<h3 id="sector7g">Sector7G<a class="anchor" href="#sector7g">#</a></h3>
 <p>Reports and RSS reader dashboard. Deployed as AWS Lambda + API Gateway.</p>
 <pre><code>┌─────────────────────────────────────────────────────────────────┐
 │  ⚡ SECTOR 7G    [Overview] [Reports] [RSS] [KBBL]   ⚙  🔔     │
@@ -523,7 +533,7 @@
 <li>Settings dropdown with dark mode (auto-follows system preference, manual override supported)</li>
 <li>All data served from DynamoDB + S3</li>
 </ul>
-<h3>Sector7B</h3>
+<h3 id="sector7b">Sector7B<a class="anchor" href="#sector7b">#</a></h3>
 <p>Privacy-focused search engine. Deployed as AWS Lambda + API Gateway.</p>
 <pre><code>┌─────────────────────────────────────────────────────────────────┐
 │                         ⚡ SECTOR 7B                            │
@@ -554,19 +564,19 @@
 <li>Dark mode support</li>
 </ul>
 <hr>
-<h2>Setup</h2>
-<h3>Prerequisites</h3>
+<h2 id="setup">Setup<a class="anchor" href="#setup">#</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="anchor" href="#prerequisites">#</a></h3>
 <ul>
 <li>Fedora Linux (or equivalent) — <code>python3</code>, <code>git</code>, <code>ffmpeg</code>, <code>yt-dlp</code> installed via package manager</li>
 <li>Ollama running locally with <code>gemma4:e2b</code> pulled: <code>ollama pull gemma4:e2b</code></li>
 <li>AWS account with SES, S3, and DynamoDB configured</li>
 <li>A Gmail account with an app password for IMAP access</li>
 </ul>
-<h3>Install Python dependencies</h3>
+<h3 id="install-python-dependencies">Install Python dependencies<a class="anchor" href="#install-python-dependencies">#</a></h3>
 <pre><code>python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt</code></pre>
-<h3>Configure environment</h3>
+<h3 id="configure-environment">Configure environment<a class="anchor" href="#configure-environment">#</a></h3>
 <p>Copy <code>.env.example</code> to <code>.env</code> and fill in your values:</p>
 <pre><code># Email
 EMAIL_ADDRESS=&lt;your-gmail-address&gt;
@@ -585,7 +595,7 @@ DYNAMODB_METRICS_TABLE=&lt;your-metrics-table-name&gt;
 
 # LLM override (optional — default is local Ollama)
 OPENROUTER=&lt;your-openrouter-api-key&gt;</code></pre>
-<h3>AWS resources needed</h3>
+<h3 id="aws-resources-needed">AWS resources needed<a class="anchor" href="#aws-resources-needed">#</a></h3>
 <table><thead><tr>
 <th>Service</th>
 <th>Purpose</th>
@@ -615,7 +625,7 @@ OPENROUTER=&lt;your-openrouter-api-key&gt;</code></pre>
 <td>Web dashboards (optional)</td>
 </tr>
 </tbody></table>
-<h3>Run manually</h3>
+<h3 id="run-manually">Run manually<a class="anchor" href="#run-manually">#</a></h3>
 <pre><code># News briefing
 python3 _scripts/generate_report.py
 
@@ -630,9 +640,9 @@ python3 _scripts/generate_report.py
 
 # Check email
 python3 _scripts/check_email.py</code></pre>
-<h3>LLM override at runtime</h3>
+<h3 id="llm-override-at-runtime">LLM override at runtime<a class="anchor" href="#llm-override-at-runtime">#</a></h3>
 <pre><code>LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_youtube.sh &quot;&lt;URL&gt;&quot;</code></pre>
-<h3>Cron setup</h3>
+<h3 id="cron-setup">Cron setup<a class="anchor" href="#cron-setup">#</a></h3>
 <pre><code>*/5 * * * *   /path/to/_scripts/check_email.py
 0 4 * * *     /path/to/_scripts/check_podcasts.py
 * * * * *     /path/to/_scripts/collect_metrics.py
@@ -641,7 +651,7 @@ python3 _scripts/check_email.py</code></pre>
 0 * * * *     /path/to/_scripts/generate_report.py
 0 8 * * *     /path/to/&lt;your-dashboard-repo&gt;/_scripts/alerts_cron.py   # KBBL alerts</code></pre>
 <hr>
-<h2>Output Directories</h2>
+<h2 id="output-directories">Output Directories<a class="anchor" href="#output-directories">#</a></h2>
 <table><thead><tr>
 <th>Directory</th>
 <th>Contents</th>
@@ -674,8 +684,8 @@ python3 _scripts/check_email.py</code></pre>
 </tr>
 </tbody></table>
 <hr>
-<h2>Troubleshooting</h2>
-<h3>No news briefing emails arriving</h3>
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting">#</a></h2>
+<h3 id="no-news-briefing-emails-arriving">No news briefing emails arriving<a class="anchor" href="#no-news-briefing-emails-arriving">#</a></h3>
 <ol>
 <li>Check cron log for errors</li>
 <li>Verify Ollama is running: <code>ollama list</code></li>
@@ -683,40 +693,40 @@ python3 _scripts/check_email.py</code></pre>
 <li>Check SES send quota: <code>aws sesv2 get-account</code></li>
 <li>Confirm DB has unread articles: <code>sqlite3 _reports/rss_articles.db &quot;SELECT count(*) FROM articles WHERE reported_at IS NULL&quot;</code></li>
 </ol>
-<h3>Podcast/YouTube processing failing</h3>
+<h3 id="podcastyoutube-processing-failing">Podcast/YouTube processing failing<a class="anchor" href="#podcastyoutube-processing-failing">#</a></h3>
 <ol>
 <li>Run the script manually to see full output</li>
 <li>Test yt-dlp: <code>yt-dlp --print &quot;%(title)s&quot; &quot;&lt;URL&gt;&quot;</code></li>
 <li>Verify Ollama is running and <code>gemma4:e2b</code> is loaded: <code>ollama list</code></li>
 <li>Check <code>_tmp/</code> for leftover files from a failed run — clean them manually</li>
 </ol>
-<h3>Email monitor not routing URLs</h3>
+<h3 id="email-monitor-not-routing-urls">Email monitor not routing URLs<a class="anchor" href="#email-monitor-not-routing-urls">#</a></h3>
 <ol>
 <li>Check the email log</li>
 <li>Confirm IMAP credentials in <code>.env</code> are valid (Gmail app password, not account password)</li>
 <li>Run <code>python3 _scripts/check_email.py</code> manually</li>
 </ol>
-<h3>Metrics not appearing</h3>
+<h3 id="metrics-not-appearing">Metrics not appearing<a class="anchor" href="#metrics-not-appearing">#</a></h3>
 <ol>
 <li>Confirm psutil is installed: <code>python3 -c &quot;import psutil&quot;</code></li>
 <li>Check SQLite: <code>sqlite3 _reports/metrics.db &quot;SELECT ts FROM metrics ORDER BY ts DESC LIMIT 5&quot;</code></li>
 </ol>
-<h3>Git push failing inside scripts</h3>
+<h3 id="git-push-failing-inside-scripts">Git push failing inside scripts<a class="anchor" href="#git-push-failing-inside-scripts">#</a></h3>
 <ol>
 <li>Confirm SSH key is loaded: <code>ssh -T git@github.com</code></li>
 <li>Check git remote: <code>git remote -v</code></li>
 </ol>
-<h3>Ollama model slow or timing out</h3>
+<h3 id="ollama-model-slow-or-timing-out">Ollama model slow or timing out<a class="anchor" href="#ollama-model-slow-or-timing-out">#</a></h3>
 <ul>
 <li><code>gemma4:e2b</code> cold-start can take ~2 min; Ollama timeout is set to 300s</li>
 <li>GPU is occupied by Ollama — Whisper must run with <code>--device cpu</code></li>
 <li>If Ollama is unresponsive: <code>systemctl restart ollama</code></li>
 </ul>
 <hr>
-<h2>Recent Reports</h2>
+<h2 id="recent-reports">Recent Reports<a class="anchor" href="#recent-reports">#</a></h2>
 <p>Each item links to the styled HTML version (rendered via GitHub Pages). Raw markdown is also available alongside each file.</p>
 <p><strong>Pipeline guide:</strong> <a href="https://losmykie.github.io/botNotes-pub/PIPELINES.html">PIPELINES.html</a> — zero to MVP for all three pipelines.</p>
-<h3>News Briefings</h3>
+<h3 id="news-briefings">News Briefings<a class="anchor" href="#news-briefings">#</a></h3>
 <ul>
 <li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1046.html">Daily News Briefing — April 25, 2026 10:46</a></li>
 <li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1045.html">Daily News Briefing — April 25, 2026 10:45</a></li>
@@ -724,7 +734,7 @@ python3 _scripts/check_email.py</code></pre>
 <li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0900.html">Daily News Briefing — April 25, 2026 09:00</a></li>
 <li><a href="https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0800.html">Daily News Briefing — April 25, 2026 08:00</a></li>
 </ul>
-<h3>YouTube Analyses</h3>
+<h3 id="youtube-analyses">YouTube Analyses<a class="anchor" href="#youtube-analyses">#</a></h3>
 <ul>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/TheQuartering_YouTube_s_Worst_Content_Creator.html">TheQuartering: YouTube's Worst Content Creator</a></li>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/The_Most_Dangerous_AI_Got_Hacked.html">The Most Dangerous AI Got Hacked</a></li>
@@ -732,7 +742,7 @@ python3 _scripts/check_email.py</code></pre>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/Open_source_is_dead_now.html">Open source is dead now</a></li>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/youtube/Should_you_let_OpenClaw_pen_test_your_system_Plus_Cybersecurity_for_ephemeral_software.html">Should you let OpenClaw pen test your system? Plus Cybersecurity for ephemeral software</a></li>
 </ul>
-<h3>Podcast Notes</h3>
+<h3 id="podcast-notes">Podcast Notes<a class="anchor" href="#podcast-notes">#</a></h3>
 <ul>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_s_View_of_the_War.html">Trump's View of the War</a></li>
 <li><a href="https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_Loses_the_Gerrymander_War.html">Trump Loses the Gerrymander War</a></li>
