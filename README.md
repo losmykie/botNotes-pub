@@ -450,25 +450,25 @@ LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_yout
 ## Recent Reports
 
 ### News Briefings
-- Daily News Briefing — March 31, 2026 07:00
-- Daily News Briefing — March 31, 2026 06:00
-- Daily News Briefing — March 31, 2026 05:00
-- Daily News Briefing — March 31, 2026 04:00
-- Daily News Briefing — March 31, 2026 03:00
+- [Daily News Briefing — April 25, 2026 10:46](_reports/Daily_News_Briefing_April_25_2026_1046.md)
+- [Daily News Briefing — April 25, 2026 10:45](_reports/Daily_News_Briefing_April_25_2026_1045.md)
+- [Daily News Briefing — April 25, 2026 10:00](_reports/Daily_News_Briefing_April_25_2026_1000.md)
+- [Daily News Briefing — April 25, 2026 09:00](_reports/Daily_News_Briefing_April_25_2026_0900.md)
+- [Daily News Briefing — April 25, 2026 08:00](_reports/Daily_News_Briefing_April_25_2026_0800.md)
 
 ### YouTube Analyses
-- [A Markdown File Just Replaced Your Most Expensive Design Meeting (Google Stitch)](_media/youtube/A_Markdown_File_Just_Replaced_Your_Most_Expensive_Design_Meeting_Google_Stitch.md)
-- [How Europe is Replacing China and the US | Business Beyond](_media/youtube/How_Europe_is_Replacing_China_and_the_US_Business_Beyond.md)
-- [Basement #008: Avi Loeb | 3I Atlas, Oumuamua, and What NASA Won't Say](_media/youtube/Basement_008_Avi_Loeb_3I_Atlas_Oumuamua_and_What_NASA_Won_t_Say.md)
-- [We Found the Most Powerful Object In the Universe](_media/youtube/We_Found_the_Most_Powerful_Object_In_the_Universe.md)
-- [Claude just killed ALL Note-Taking Apps. Here is proof.](_media/youtube/Claude_just_killed_ALL_Note_Taking_Apps_Here_is_proof.md)
+- [TheQuartering: YouTube's Worst Content Creator](_media/youtube/TheQuartering_YouTube_s_Worst_Content_Creator.md)
+- [The Most Dangerous AI Got Hacked](_media/youtube/The_Most_Dangerous_AI_Got_Hacked.md)
+- [Why does bias exist in AI models?](_media/youtube/Why_does_bias_exist_in_AI_models.md)
+- [Open source is dead now](_media/youtube/Open_source_is_dead_now.md)
+- [Should you let OpenClaw pen test your system? Plus Cybersecurity for ephemeral software](_media/youtube/Should_you_let_OpenClaw_pen_test_your_system_Plus_Cybersecurity_for_ephemeral_software.md)
 
 ### Podcast Notes
-- [Big Tech Selloff May Signal Turning Point](_media/podcasts/Big_Tech_Selloff_May_Signal_Turning_Point.md)
-- [Project Maven: The Dawn of AI Warfare](_media/podcasts/Project_Maven_the_Dawn_of_AI_Warfare.md)
-- [US Expands Threats to Iran Energy & Water Even as It Hails Talks](_media/podcasts/US_Expands_Threats_to_Iran_Energy_Water_Even_as_It_Hails_Talks.md)
-- [I Was Ruthless About Killing Complexity — HSBC CEO on Rewiring the Bank](_media/podcasts/I_Was_Ruthless_About_Killing_Complexity_HSBC_CEO_on_Rewiring_the_Bank.md)
-- [The State of AI Q2: AI's Second Moment](_media/podcasts/The_State_of_AI_Q2_AI_s_Second_Moment.md)
+- [Trump's View of the War](_media/podcasts/Trump_s_View_of_the_War.md)
+- [Trump Loses the Gerrymander War](_media/podcasts/Trump_Loses_the_Gerrymander_War.md)
+- [Intel Delivers Strong AI-Fueled Outlook](_media/podcasts/Intel_Delivers_Strong_AI_Fueled_Outlook.md)
+- [Women Lose Significant Bone Density During Menopause](_media/podcasts/Women_Lose_Significant_Bone_Density_During_Menopause.md)
+- [DOJ Drops Powell Probe, Smoothing Path for Warsh to Lead Fed](_media/podcasts/DOJ_Drops_Powell_Probe_Smoothing_Path_for_Warsh_to_Lead_Fed.md)
 
 ---
 
