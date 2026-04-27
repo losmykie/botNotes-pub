@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Guide: From Zero to MVP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #111827;
+            background: #FFFFFF;
+        }
+
+        header {
+            background: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .brand .accent { color: #8CE4FF; }
+
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 48px 24px 96px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-top: 40px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8CE4FF;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111827;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        p {
+            color: #374151;
+            margin-bottom: 14px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E5E7EB;
+            margin: 32px 0;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 14px;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #111827;
+            text-decoration-color: #8CE4FF;
+            text-underline-offset: 3px;
+        }
+
+        a:hover { color: #6B7280; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #E5E7EB;
+        }
+
+        th {
+            background: #F9FAFB;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #E5E7EB;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        strong { font-weight: 600; color: #111827; }
+        em { font-style: italic; color: #6B7280; }
+
+        blockquote {
+            border-left: 3px solid #E5E7EB;
+            padding: 4px 16px;
+            color: #6B7280;
+            font-style: italic;
+            margin: 14px 0;
+        }
+
+        .callout {
+            background: #F9FAFB;
+            border-left: 3px solid #8CE4FF;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #9CA3AF;
+            padding: 32px 24px;
+            border-top: 1px solid #E5E7EB;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 640px) {
+            main { padding: 32px 16px 64px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
+    </header>
+    <main>
+        <h1>Pipeline Guide: From Zero to MVP</h1>
+<p>A complete implementation guide for the three core pipelines in the Sector 7G automated intelligence system. Each section walks through exactly what the code does, what infrastructure you need, and how to get something running.</p>
+<hr>
+<h2>What You're Building</h2>
+<p>Three fully automated pipelines that run without intervention:</p>
+<table><thead><tr>
+<th>Pipeline</th>
+<th>Trigger</th>
+<th>Input</th>
+<th>Output</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>News Briefing</strong></td>
+<td>Hourly cron</td>
+<td>RSS feeds + Brave News API</td>
+<td>AI-analyzed briefing → email + cloud storage</td>
+</tr>
+<tr>
+<td><strong>YouTube Analyzer</strong></td>
+<td>Drop URL in Telegram or email</td>
+<td>YouTube URL</td>
+<td>Structured notes → email + cloud storage</td>
+</tr>
+<tr>
+<td><strong>Podcast Transcriber</strong></td>
+<td>Drop URL, or automatic from feed</td>
+<td>Podcast URL or audio file</td>
+<td>Transcript + analysis → email + cloud storage</td>
+</tr>
+</tbody></table>
+<p>All three share the same stack: local Ollama inference, AWS for email and storage, Python 3, and bash.</p>
+<hr>
+<h2>Prerequisites</h2>
+<h3>System</h3>
+<ul>
+<li>Linux host (Ubuntu or Fedora — scripts use `dnf` references in comments, adapt for your distro)</li>
+<li>Python 3.10+</li>
+<li>`git`, `curl` installed</li>
+</ul>
+<h3>System-level tools (install via package manager, not pip)</h3>
+<p>```bash</p>
+<h1>Ubuntu</h1>
+<p>sudo apt install ffmpeg yt-dlp</p>
+<h1>Fedora</h1>
+<p>sudo dnf install ffmpeg yt-dlp</p>
+<p>```</p>
+<h3>Python environment</h3>
+<p>```bash</p>
+<p>python3 -m venv .venv</p>
+<p>source .venv/bin/activate</p>
+<p>pip install -r requirements.txt</p>
+<p>```</p>
+<p>`requirements.txt` minimum:</p>
+<p>```</p>
+<p>boto3</p>
+<p>requests</p>
+<p>openai-whisper</p>
+<p>psutil</p>
+<p>matplotlib</p>
+<p>```</p>
+<h3>Ollama</h3>
+<p>Install from <a href="https://ollama.com">ollama.com</a> and pull the models:</p>
+<p>```bash</p>
+<p>ollama pull gemma4:e2b     # YouTube, podcasts, email summarization</p>
+<p>ollama pull qwen3.5:9b     # News briefing (large context window needed)</p>
+<p>```</p>
+<p>Verify Ollama is running on `localhost:11434`:</p>
+<p>```bash</p>
+<p>curl http://localhost:11434/api/tags</p>
+<p>```</p>
+<h3>AWS</h3>
+<p>You need an AWS account with these services configured:</p>
+<table><thead><tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td>S3</td>
+<td>Stores reports, transcripts, article indexes</td>
+</tr>
+<tr>
+<td>DynamoDB</td>
+<td>Indexes reports for dashboard retrieval</td>
+</tr>
+<tr>
+<td>SES</td>
+<td>Sends email — verify your sending domain first</td>
+</tr>
+</tbody></table>
+<p>AWS credentials go in `~/.aws/credentials` (standard profile format). Region: `us-east-1` is hardcoded in the scripts — change if needed.</p>
+<h3>Environment file</h3>
+<p>Create `.env` in the repo root. <strong>Never commit this file.</strong></p>
+<p>```bash</p>
+<h1>Email routing</h1>
+<p>EMAIL_ADDRESS=<your-gmail-address></p>
+<p>EMAIL_APP_PASSWORD=<your-gmail-app-password></p>
+<p>MY_EMAIL=<your-personal-email></p>
+<h1>Telegram (optional — for URL routing)</h1>
+<p>TELEGRAM_BOT_TOKEN=<your-telegram-bot-token></p>
+<p>TELEGRAM_CHAT_ID=<your-telegram-chat-id></p>
+<h1>Brave News API (optional — needed for news briefing Brave section)</h1>
+<p>BRAVE_API=<your-brave-api-key></p>
+<h1>OpenRouter (optional — fallback LLM if Ollama fails)</h1>
+<p>OPENROUTER=<your-openrouter-api-key></p>
+<h1>AWS</h1>
+<p>AWS_DEFAULT_REGION=us-east-1</p>
+<p>```</p>
+<p>Scripts load `.env` manually at startup — no `python-dotenv` needed.</p>
+<hr>
+<h2>Pipeline 1: News Briefing</h2>
+<p><strong>Script:</strong> `_scripts/generate_report.py`</p>
+<p><strong>Cron:</strong> `0 * * * *` (every hour)</p>
+<p><strong>Model:</strong> `qwen3.5:9b` (needs the large context window for a full article list)</p>
+<h3>What it does, step by step</h3>
+<p><strong>Step 1 — Load RSS articles from DynamoDB</strong></p>
+<p>Scans the RSS DynamoDB table for articles where `reported_at` does not exist (unread) and `fetched_at >= now - 24h`. The 24-hour window prevents the same articles cycling back on every run. Results are grouped by feed name for later rendering.</p>
+<p>A separate script (`poll_feeds.py`) runs every 10 minutes and writes fresh RSS articles into this table. The briefing generator just reads from it.</p>
+<p><strong>Step 2 — Fetch Brave News</strong></p>
+<p>Hits the Brave News API across seven hardcoded topic queries:</p>
+<p>```</p>
+<p>Top Headlines, AI News, Anthropic, OpenAI, AWS, Apple, Iran / Middle East</p>
+<p>```</p>
+<p>Returns up to 5 results per topic. Results are stored in a local SQLite DB (`brave_articles.db`) to prevent the same URL being reported twice. A 7-day pruning window keeps the DB clean.</p>
+<p>If `BRAVE_API` is not set, this step is silently skipped.</p>
+<p><strong>Step 3 — Load analysis history from S3</strong></p>
+<p>Fetches the last 10 analysis text files from S3 (`transcripts/news-briefings/YYYY/MM/`). These are injected into the LLM prompt as context under the instruction <em>"do NOT repeat these trends"</em> — so the model doesn't just write the same briefing every hour when the news cycle is slow.</p>
+<p><strong>Step 4 — Build the unified article list</strong></p>
+<p>RSS and Brave articles are merged into a single numbered list:</p>
+<p>```</p>
+<p>[1] [RSS/Hacker News] Article title | description snippet</p>
+<p>[2] [Brave/AI News] Article title | description snippet</p>
+<p>...</p>
+<p>```</p>
+<p>Each article gets a sequential number `[N]` that the LLM must use as a citation in its output.</p>
+<p><strong>Step 5 — Generate AI analysis</strong></p>
+<p>Sends the full numbered list to `qwen3.5:9b` via Ollama's `/api/chat` endpoint with a 600-second timeout. The prompt enforces:</p>
+<ul>
+<li>Every bullet must begin with `[N]` citation(s) — no uncited bullets</li>
+<li>Topics must be grouped under `<strong>bold headers</strong>` (e.g. `<strong>AI & Technology</strong>`)</li>
+<li>Each group gets 2-4 sentences of context, then individual bullets</li>
+<li>Bullets are 30-50 words each: key fact + detail + implication</li>
+<li>No invented topics — only groups supported by the article list</li>
+</ul>
+<p>After generation, a validation pass strips any bullet whose citation numbers don't appear in the article index. This kills hallucinated claims.</p>
+<p><strong>Step 6 — Write the report file</strong></p>
+<p>Writes a markdown file to `_reports/Daily_News_Briefing_MONTH_DD_YYYY_HHMM.md`. Structure:</p>
+<p>```markdown</p>
+<h1>Daily News Briefing — April 25, 2026 10:00</h1>
+<h2>Analysis & Trends to Watch</h2>
+<p>[AI-generated grouped analysis with [N] citations]</p>
+<hr>
+<h2>Brave News (34 articles)</h2>
+<p>[Topic tables with title + link]</p>
+<hr>
+<h2>RSS Feeds (N articles)</h2>
+<p>[Per-feed tables with title + date + link]</p>
+<p>```</p>
+<p><strong>Step 7 — Upload to S3 and index in DynamoDB</strong></p>
+<p>Three uploads per run:</p>
+<ol>
+<li>`reports/news-briefings/filename.md` — the full report (retrieved by the dashboard)</li>
+<li>`transcripts/news-briefings/YYYY/MM/filename.txt` — analysis text only (used as history context in future runs)</li>
+<li>`articles/news-briefings/YYYY/MM/filename.json` — the full article index with URLs and metadata</li>
+</ol>
+<p>DynamoDB record:</p>
+<p>```</p>
+<p>PK: category = "news-briefings"</p>
+<p>SK: "YYYY-MM-DDTHH:MM:SSZ#filename.md"</p>
+<p>Fields: s3_key, title, date</p>
+<p>```</p>
+<p><strong>Step 8 — Prune local reports</strong></p>
+<p>Keeps only the 5 most recent `.md` files in `_reports/`. Older ones are deleted. S3 and DynamoDB retain the full history.</p>
+<p><strong>Step 9 — Send HTML email</strong></p>
+<p>Builds a styled HTML email with:</p>
+<ul>
+<li>Yellow header bar (`#FEEE91`) with article count</li>
+<li>Source pills (RSS count, Brave count)</li>
+<li>AI analysis rendered with Sky Blue (`#8CE4FF`) accents and clickable citation superscripts</li>
+<li>Article tables per feed (RSS) and per topic (Brave)</li>
+<li>Sent via AWS SES v2</li>
+</ul>
+<p><strong>Step 10 — Mark articles as reported</strong></p>
+<p>Updates `reported_at` on every RSS article in DynamoDB and every Brave URL in SQLite. They won't appear in future runs.</p>
+<p><strong>Step 11 — Git commit and push</strong></p>
+<p>Auto-commits the new `.md` file to the repo with identity `mrSmither <your-bot-email@gmail.com>` and pushes. This is how the public repo gets updated automatically.</p>
+<hr>
+<h3>MVP minimum for this pipeline</h3>
+<ol>
+<li>Set up `poll_feeds.py` cron to populate the RSS DynamoDB table</li>
+<li>Configure `.env` with `BRAVE_API` (free tier works)</li>
+<li>Pull `qwen3.5:9b` in Ollama</li>
+<li>Create the S3 bucket and DynamoDB table</li>
+<li>Run manually: `python3 _scripts/generate_report.py`</li>
+</ol>
+<p>You can skip SES initially — the markdown file is written locally regardless. Wire up email once the analysis quality looks good.</p>
+<hr>
+<h2>Pipeline 2: YouTube Analyzer</h2>
+<p><strong>Script:</strong> `_scripts/process_youtube.sh`</p>
+<p><strong>Trigger:</strong> Manual, via email, or via Telegram URL drop</p>
+<p><strong>Model:</strong> `gemma4:e2b` (default, overridable)</p>
+<p>Pass a YouTube URL to analyze it, or pass `--music-video` to skip analysis and route it to a music catalog instead.</p>
+<h3>What it does, step by step</h3>
+<p><strong>Step 1 — Get the video title</strong></p>
+<p>```bash</p>
+<p>python3 -m yt_dlp --print "%(title)s" "$URL"</p>
+<p>```</p>
+<p>The raw title is sanitized into a filename-safe string (`spaces and special chars → underscores`). This becomes the output filename base.</p>
+<p><strong>Step 2 — Download subtitles</strong></p>
+<p>Tries auto-generated English subtitles first:</p>
+<p>```bash</p>
+<p>python3 -m yt_dlp --write-auto-subs --sub-lang en --sub-format vtt \</p>
+<p>--skip-download -o "$VTT_BASE.%(ext)s" "$URL"</p>
+<p>```</p>
+<p>If the `.vtt` file exists, it strips all timing lines, position tags, and WEBVTT headers, then deduplicates consecutive identical lines (auto-subs repeat heavily). The clean transcript goes to `_tmp/transcript_TIMESTAMP.txt`.</p>
+<p>If no subtitles exist, falls back to Whisper:</p>
+<p>```bash</p>
+<p>python3 -m whisper "$AUDIO_FILE" --model base --device cpu \</p>
+<p>--output_format txt --output_dir "$TMP_DIR"</p>
+<p>```</p>
+<p>Whisper must run with `--device cpu` — the GPU is occupied by Ollama. Cold-start adds ~2 minutes.</p>
+<p><strong>Step 3 — LLM analysis</strong></p>
+<p>Sends the transcript to Ollama with a strict output format:</p>
+<p>```</p>
+<h1>Video Title</h1>
+<h2>Summary & Key Takeaways</h2>
+<p>(4-6 bullets — main topics, arguments, conclusions)</p>
+<h2>Detailed Notes</h2>
+<p>(Section-by-section breakdown with ### subheadings, - bullets, <strong>bold key terms</strong>)</p>
+<p>```</p>
+<p>The prompt uses an "assistant prefill" trick — seeding the assistant turn with `# Video Title\n\n## Summary & Key Takeaways\n` to force the model to start from the right place rather than opening with meta-commentary.</p>
+<p>If Ollama fails, falls back to OpenRouter (`xiaomi/mimo-v2-pro`). If both fail, saves the raw transcript instead of losing the data.</p>
+<p><strong>Step 4 — Upload to S3</strong></p>
+<p>Two objects:</p>
+<ol>
+<li>`transcripts/youtube/YYYY/MM/safe_title.txt` — raw transcript</li>
+<li>`reports/youtube/safe_title.md` — the LLM-formatted analysis</li>
+</ol>
+<p>DynamoDB record:</p>
+<p>```</p>
+<p>PK: category = "youtube"</p>
+<p>SK: "YYYY-MM-DDTHH:MM:SSZ#safe_title.md"</p>
+<p>Fields: s3_key, title, date</p>
+<p>```</p>
+<p><strong>Step 5 — Cleanup</strong></p>
+<p>Deletes the transcript from `_tmp/`. The `_tmp/` directory is gitignored and used only as a staging area.</p>
+<p><strong>Step 6 — Git commit and push</strong></p>
+<p>Auto-commits `_media/youtube/safe_title.md` to the repo and pushes.</p>
+<p><strong>Step 7 — Send HTML email</strong></p>
+<p>Formatted email with the full analysis. The `md_to_html()` function inside the script handles the conversion — headings, bullet lists with Sky Blue dot indicators, bold terms.</p>
+<h3>LLM override at runtime</h3>
+<p>```bash</p>
+<p>LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 \</p>
+<p>./_scripts/process_youtube.sh "https://youtube.com/watch?v=..."</p>
+<p>```</p>
+<h3>Music video mode</h3>
+<p>Pass `--music-video` to skip the LLM entirely and route to a separate S3 bucket for video storage:</p>
+<p>```bash</p>
+<p>./_scripts/process_youtube.sh --music-video "https://youtube.com/watch?v=..."</p>
+<p>```</p>
+<p>Downloads the full video + thumbnail, uploads to a second S3 bucket (`eu-north-1`), indexes in DynamoDB as `music-video`, sends a confirmation email.</p>
+<hr>
+<h3>MVP minimum for this pipeline</h3>
+<ol>
+<li>Install `yt-dlp` and `ffmpeg` system-wide</li>
+<li>Pull `gemma4:e2b` in Ollama</li>
+<li>Set up the S3 bucket and DynamoDB table</li>
+<li>Run: `./_scripts/process_youtube.sh "https://youtube.com/watch?v=..."`</li>
+</ol>
+<p>The script writes to `_media/youtube/` locally regardless of S3 success. You can test the full analysis chain without AWS — just remove or skip the upload step.</p>
+<hr>
+<h2>Pipeline 3: Podcast Transcriber</h2>
+<p><strong>Script:</strong> `_scripts/process_podcast.sh`</p>
+<p><strong>Trigger:</strong> Manual URL drop, email, or automatic from feed monitor (`check_podcasts.py`)</p>
+<p><strong>Model:</strong> `gemma4:e2b` (default, overridable)</p>
+<h3>What it does, step by step</h3>
+<p><strong>Step 1 — Get the podcast title</strong></p>
+<p>If triggered by the feed monitor (`check_podcasts.py`), it sets `PODCAST_NAME` and `EPISODE_TITLE` env vars before calling this script. The script uses those to build a display title like `Show Name — Episode Title`.</p>
+<p>If called manually, it falls back to `yt-dlp --print "%(title)s"` against the URL.</p>
+<p><strong>Step 2 — Download audio</strong></p>
+<p>```bash</p>
+<p>python3 -m yt_dlp "$URL" -x --audio-format mp3 -o "$AUDIO_FILE"</p>
+<p>```</p>
+<p>Works with Apple Podcasts URLs, direct `.mp3` / `.m4a` links, and most podcast RSS enclosures. The `-x` flag extracts audio and converts to mp3.</p>
+<p><strong>Step 3 — Transcribe with Whisper</strong></p>
+<p>```bash</p>
+<p>python3 -m whisper "$AUDIO_FILE" --model base --device cpu \</p>
+<p>--output_format txt --output_dir "$TMP_DIR"</p>
+<p>```</p>
+<p>This is the slowest step. Budget ~4–5 minutes per 40-minute episode on a CPU-only machine. The `base` model is used for speed — swap to `small` or `medium` for better accuracy if you have the patience.</p>
+<p>`--device cpu` is mandatory if Ollama is using the GPU. Running both on the GPU causes OOM errors.</p>
+<p><strong>Step 4 — LLM analysis</strong></p>
+<p>The podcast prompt is deliberately different from the YouTube prompt. It asks for editorial analysis, not just a structured summary:</p>
+<p>```</p>
+<h1>Show — Episode Title</h1>
+<h2>Executive Summary</h2>
+<p>(2-3 paragraph narrative — what was discussed, why it matters, overall tone)</p>
+<h2>Key Themes & Arguments</h2>
+<p>(For each major theme: ### subheading, position taken, evidence, your analysis. Bullets under each ###.)</p>
+<h2>Notable Quotes</h2>
+<p>(3-5 direct quotes that best capture the episode)</p>
+<h2>Context & Background</h2>
+<p>(Why is this topic being discussed now — what events or trends does it connect to)</p>
+<h2>Key Takeaways</h2>
+<p>(5-7 concise bullets — what a busy reader needs to know)</p>
+<p>```</p>
+<p>OpenRouter fallback works the same as YouTube. Raw transcript saved if both fail.</p>
+<p><strong>Step 5 — Upload to S3</strong></p>
+<p>Two objects:</p>
+<ol>
+<li>`transcripts/podcasts/YYYY/MM/safe_title.txt` — raw transcript</li>
+<li>`reports/podcasts/safe_title.md` — analysis</li>
+</ol>
+<p>DynamoDB record same schema as YouTube but with `category = "podcasts"`.</p>
+<p><strong>Step 6 — Cleanup</strong></p>
+<p>Deletes the raw transcript from `_tmp/`.</p>
+<p><strong>Step 7 — Git commit and push</strong></p>
+<p>Auto-commits `_media/podcasts/safe_title.md` and pushes.</p>
+<p><strong>Step 8 — Send HTML email</strong></p>
+<p>Same design as the news briefing email — Sky Blue accent, yellow header bar, styled bullet lists.</p>
+<hr>
+<h3>MVP minimum for this pipeline</h3>
+<ol>
+<li>`yt-dlp` and `ffmpeg` installed</li>
+<li>Whisper installed (`pip install openai-whisper`)</li>
+<li>`gemma4:e2b` in Ollama</li>
+<li>Run: `./_scripts/process_podcast.sh "https://podcasts.apple.com/..."`</li>
+</ol>
+<p>Expect the first run to be slow — Whisper downloads the model on first use (~150MB for `base`).</p>
+<hr>
+<h2>Shared Infrastructure</h2>
+<h3>DynamoDB table schema</h3>
+<p>One table handles all report types.</p>
+<p>```</p>
+<p>Table: <your-reports-table-name></p>
+<p>PK (String): category</p>
+<p>Values: "news-briefings", "youtube", "podcasts", "music-video"</p>
+<p>SK (String): "YYYY-MM-DDTHH:MM:SSZ#filename.md"</p>
+<p>Sortable by date, unique per report</p>
+<p>Other fields: s3_key, title, date</p>
+<p>```</p>
+<h3>S3 layout</h3>
+<p>```</p>
+<p>your-s3-bucket/</p>
+<p>reports/</p>
+<p>news-briefings/     ← full briefing .md files</p>
+<p>youtube/            ← YouTube analysis .md files</p>
+<p>podcasts/           ← podcast analysis .md files</p>
+<p>transcripts/</p>
+<p>news-briefings/YYYY/MM/    ← analysis text (used for history context)</p>
+<p>youtube/YYYY/MM/           ← raw VTT or Whisper transcripts</p>
+<p>podcasts/YYYY/MM/          ← raw Whisper transcripts</p>
+<p>articles/</p>
+<p>news-briefings/YYYY/MM/    ← full article index .json files</p>
+<p>```</p>
+<h3>RSS feed poller</h3>
+<p>`poll_feeds.py` runs every 10 minutes and writes new articles to DynamoDB. Configure your feed list in `_config/rss_feeds.json`:</p>
+<p>```json</p>
+<p>[</p>
+<p>{"name": "Hacker News", "url": "https://news.ycombinator.com/rss"},</p>
+<p>{"name": "BBC News", "url": "http://feeds.bbci.co.uk/news/rss.xml"},</p>
+<p>{"name": "AWS News Blog", "url": "https://aws.amazon.com/blogs/aws/feed/"}</p>
+<p>]</p>
+<p>```</p>
+<p>The briefing generator reads from DynamoDB, not the feeds directly — so `poll_feeds.py` must be running before `generate_report.py` will have anything to analyze.</p>
+<h3>Git auto-commit identity</h3>
+<p>Each script commits with a bot identity. Set these in the script or via environment:</p>
+<p>```bash</p>
+<p>GIT_AUTHOR_NAME="your-bot-name"</p>
+<p>GIT_AUTHOR_EMAIL="your-bot-email@gmail.com"</p>
+<p>GIT_COMMITTER_NAME="your-bot-name"</p>
+<p>GIT_COMMITTER_EMAIL="your-bot-email@gmail.com"</p>
+<p>```</p>
+<p>SSH key must be loaded for `git push` to work without a password prompt. Test with `ssh -T git@github.com`.</p>
+<h3>SES setup</h3>
+<p>Verify your sending domain in SES before going live. The scripts use SES v2 (`boto3.client('sesv2', ...)`).</p>
+<p>```python</p>
+<p>ses.send_email(</p>
+<p>FromEmailAddress='botNotes@yourdomain.com',</p>
+<p>Destination={'ToAddresses': ['you@email.com']},</p>
+<p>Content={'Simple': {'Subject': {...}, 'Body': {'Html': {...}}}}</p>
+<p>)</p>
+<p>```</p>
+<p>You'll get a sandbox limit of 200 emails/day initially. Request production access once you've verified the setup.</p>
+<hr>
+<h2>Getting to MVP</h2>
+<p>Build in this order. Each step is independently useful.</p>
+<h3>Phase 1 — Local analysis (no cloud needed)</h3>
+<ol>
+<li>Set up virtualenv + install deps</li>
+<li>Install Ollama, pull `gemma4:e2b` and `qwen3.5:9b`</li>
+<li>Install `yt-dlp` and `ffmpeg`</li>
+<li>Drop a YouTube URL: `./_scripts/process_youtube.sh "URL"` — output lands in `_media/youtube/`</li>
+<li>Drop a podcast URL: `./_scripts/process_podcast.sh "URL"` — output in `_media/podcasts/`</li>
+</ol>
+<p>This gets you analysis with zero cloud dependency. The `.md` files are immediately readable.</p>
+<h3>Phase 2 — Cloud storage and email</h3>
+<ol>
+<li>Create S3 bucket and DynamoDB table</li>
+<li>Configure AWS credentials</li>
+<li>Set up SES, verify your sending domain</li>
+<li>Fill in `.env` with email and AWS settings</li>
+<li>Run a YouTube or podcast process — should now upload to S3, index in DDB, and email you</li>
+</ol>
+<h3>Phase 3 — Automated news briefing</h3>
+<ol>
+<li>Add `BRAVE_API` to `.env` (free tier: <a href="https://brave.com/search/api">brave.com/search/api</a>)</li>
+<li>Create the RSS feed config in `_config/rss_feeds.json`</li>
+<li>Set up `poll_feeds.py` on cron: `*/10 * * * * /path/to/poll_feeds.py`</li>
+<li>Let it run for a cycle or two to populate DynamoDB</li>
+<li>Run `generate_report.py` manually — check the markdown output</li>
+<li>Once happy, add it to cron: `0 * * * * /path/to/generate_report.py`</li>
+</ol>
+<h3>Phase 4 — URL routing (Telegram or email)</h3>
+<ol>
+<li>Set up the Telegram bot and add `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` to `.env`</li>
+<li>Wire `check_email.py` or the Telegram MCP listener to call the correct script based on URL pattern</li>
+<li>Test: drop a YouTube link in Telegram, confirm the analysis arrives by email</li>
+</ol>
+<h3>Phase 5 — Podcast feed monitor</h3>
+<ol>
+<li>Configure `_config/podcast_subscriptions.json` with your podcast RSS feeds</li>
+<li>Add `check_podcasts.py` to cron: `0 4 * * * /path/to/check_podcasts.py`</li>
+<li>It polls feeds daily at 4am, finds new episodes, and calls `process_podcast.sh` automatically</li>
+</ol>
+<hr>
+<h2>Key Gotchas</h2>
+<p><strong>Whisper and Ollama can't share a GPU.</strong> Run Whisper with `--device cpu` always. Whisper cold-start is ~2 min; a 40-min podcast takes ~4-5 min to transcribe on CPU.</p>
+<p><strong>qwen3.5:9b is mandatory for the briefing, not optional.</strong> The news briefing prompt sends 50-100+ articles in one context window. `gemma4:e2b` (smaller model) truncates the context and starts hallucinating. Use `qwen3.5:9b` for `generate_report.py`.</p>
+<p><strong>Brave News deduplication is local, not global.</strong> The 7-day SQLite window prevents the same URL from appearing twice within a week — but if you wipe the DB, URLs can recycle.</p>
+<p><strong>SES sandbox mode blocks non-verified recipients.</strong> While in sandbox, you can only send to email addresses you've individually verified in SES. Request production access early.</p>
+<p><strong>The analysis history loop.</strong> `generate_report.py` loads the last 10 analyses from S3 and injects them into the prompt. This prevents repetition across runs but adds to the prompt length — don't reduce the Ollama timeout below 300s.</p>
+<p><strong>yt-dlp updates break things.</strong> Podcast and YouTube URLs break when sites update their APIs. Run `pip install --upgrade yt-dlp` if downloads start failing — it's almost always a yt-dlp version issue, not a script bug.</p>
+<p><strong>Log rotation.</strong> Scripts append to log files and rotate at 2000 lines. If you're debugging a cron job that's been running for weeks, the earliest entries may have been pruned.</p>
+    </main>
+    <footer>Sector 7G Automated Intelligence System</footer>
+</body>
+</html>
