@@ -103,14 +103,18 @@ You (Telegram)
      │    Web searches, reads docs, investigates
      │    errors, compares options and tools
      │
-     └──► Kirk Van Houten — Local Inference
-          Low-stakes text tasks via local Ollama model
-          (summaries, rewrites, formatting)
+     ├──► Kirk Van Houten — Text Tasks
+     │    Low-stakes text tasks — summaries, rewrites,
+     │    formatting (runs directly, no local model needed)
+     │
+     └──► Groundskeeper Willy — Security
+          Reviews all content before any public push,
+          hunts for secrets, internal URLs, and private info
 ```
 
 ### How sub-agents work
 
-Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits. Kirk handles low-stakes text tasks via a local Ollama model — no cloud API needed.
+Sub-agents run in **parallel** when tasks are independent (e.g. Todd researching while Rod implements), and **sequentially** when one result feeds the next (e.g. Todd researches → Rod builds → Maude tests). Rev. Lovejoy is consulted for decisions that affect the whole system. Prof. Frink is consulted when an approach needs analysis before the team commits. Kirk handles low-stakes text tasks (summaries, rewrites, formatting) directly. Groundskeeper Willy reviews all content before any public push — checking for emails, API keys, internal URLs, and private resource names.
 
 For multi-step tasks initiated via Telegram, Homer routes work through Ned, who sends live progress updates back to Telegram at each milestone.
 
@@ -124,14 +128,15 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 
 | Pipeline | Provider | Model |
 |---|---|---|
-| All pipelines (default) | Ollama (local) | `gemma4:e2b` |
+| News Briefing (`generate_report.py`) | Ollama (local) | `qwen3.5:9b` |
+| YouTube / Podcast / Email (default) | Ollama (local) | `gemma4:e2b` |
 | Override (any pipeline) | OpenRouter | configurable via `LLM_PROVIDER` / `LLM_MODEL` env vars |
-| Agent text tasks (Kirk Van Houten) | Ollama (local) | `gemma4:e2b` |
+| Agent text tasks (Kirk Van Houten) | Claude (sub-agent) | direct — no local model needed |
 | Dashboard TTS | Mistral API | `voxtral-mini-tts-2603` |
 
 **Ollama models available locally:**
-- `gemma4:e2b` — primary model for all pipelines
-- `qwen3.5:9b` — available (legacy)
+- `gemma4:e2b` — primary model for YouTube, podcast, and email pipelines
+- `qwen3.5:9b` — news briefing model (large context window handles full article list)
 - `ministral-3:3b` — available
 
 ---
@@ -146,13 +151,14 @@ Claude connects to Telegram via the `plugin:telegram` MCP server. All replies, f
 | Every hour | News Briefing | Ollama analysis → S3 → DynamoDB → SES email |
 | Every hour | Metrics Reporter | matplotlib charts → S3 → SES email |
 | Daily 4am | Podcast Monitor | Polls podcast feeds, routes new episodes |
+| Daily 8am UTC | KBBL Alerts | Checks keyword alerts (Google News + Brave), emails digest if new results |
 
 ---
 
 ## Pipeline Detail
 
 ### News Briefing
-Runs hourly. Pulls unread articles from the article store, sends them to the local Ollama model (`gemma4:e2b`), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.
+Runs hourly. Pulls unread articles from the article store, sends them to the local Ollama model (`qwen3.5:9b`), gets a structured trend analysis back, renders it as styled HTML, emails it via SES, stores the markdown in S3 + DynamoDB, and prunes local copies to the latest 5. Pruned files and the new briefing are committed and pushed to git automatically.
 
 ### YouTube Analyzer
 Triggered by a YouTube URL dropped in Telegram or email. Full pipeline:
@@ -226,7 +232,7 @@ Reports and RSS reader dashboard. Deployed as AWS Lambda + API Gateway.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  ⚡ SECTOR 7G    [Overview] [Reports] [RSS]          ⚙  🔔     │
+│  ⚡ SECTOR 7G    [Overview] [Reports] [RSS] [KBBL]   ⚙  🔔     │
 ├─────────────────────────────────────────────────────────────────┤
 │  OVERVIEW                                                        │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐        │
@@ -263,6 +269,7 @@ Reports and RSS reader dashboard. Deployed as AWS Lambda + API Gateway.
 - Report browser for news briefings, YouTube analyses, and podcast notes
 - TTS playback via Mistral Voxtral — reads "Summary & Key Takeaways" section only
 - RSS reader with collapsible feed panel, article view, Kagi summarizer integration
+- KBBL — Google Alerts clone: monitors keywords via Google News RSS and Brave News API, horizontal chip tab UI (mobile-optimized), daily email digest via SES when new results arrive
 - Settings dropdown with dark mode (auto-follows system preference, manual override supported)
 - All data served from DynamoDB + S3
 
@@ -325,22 +332,22 @@ Copy `.env.example` to `.env` and fill in your values:
 
 ```bash
 # Email
-EMAIL_ADDRESS=your-bot@gmail.com
-EMAIL_APP_PASSWORD=your-app-password
-MY_EMAIL=your-personal@email.com
+EMAIL_ADDRESS=<your-gmail-address>
+EMAIL_APP_PASSWORD=<your-app-password>
+MY_EMAIL=<your-personal-email>
 
 # Telegram
-TELEGRAM_BOT_TOKEN=your-bot-token
-TELEGRAM_CHAT_ID=your-chat-id
+TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>
+TELEGRAM_CHAT_ID=<your-telegram-chat-id>
 
 # AWS
 AWS_DEFAULT_REGION=us-east-1
-S3_BUCKET=YOUR_BUCKET_NAME
-DYNAMODB_REPORTS_TABLE=YOUR_TABLE_NAME
-DYNAMODB_METRICS_TABLE=YOUR_METRICS_TABLE_NAME
+S3_BUCKET=<your-s3-bucket-name>
+DYNAMODB_REPORTS_TABLE=<your-reports-table-name>
+DYNAMODB_METRICS_TABLE=<your-metrics-table-name>
 
 # LLM override (optional — default is local Ollama)
-OPENROUTER=your-openrouter-key
+OPENROUTER=<your-openrouter-api-key>
 ```
 
 ### AWS resources needed
@@ -388,6 +395,7 @@ LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_yout
 0 * * * *     /path/to/_scripts/email_metrics_report.py
 */10 * * * *  /path/to/_scripts/poll_feeds.py
 0 * * * *     /path/to/_scripts/generate_report.py
+0 8 * * *     /path/to/<your-dashboard-repo>/_scripts/alerts_cron.py   # KBBL alerts
 ```
 
 ---
