@@ -154,6 +154,31 @@
             margin-bottom: 16px;
         }
 
+        pre {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        pre code {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        code {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            background: #F3F4F6;
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: #111827;
+        }
+
         footer {
             text-align: center;
             font-size: 12px;
@@ -192,11 +217,11 @@
 </tr>
 <tr>
 <td>LLM</td>
-<td>Ollama running locally (`localhost:11434`)</td>
+<td>Ollama running locally (<code>localhost:11434</code>)</td>
 </tr>
 <tr>
 <td>Transcription</td>
-<td>Whisper (`--device cpu` always — GPU is reserved for Ollama)</td>
+<td>Whisper (<code>--device cpu</code> always — GPU is reserved for Ollama)</td>
 </tr>
 <tr>
 <td>Download</td>
@@ -216,7 +241,7 @@
 </tr>
 <tr>
 <td>Secrets</td>
-<td>`.env` file, loaded manually at script start</td>
+<td><code>.env</code> file, loaded manually at script start</td>
 </tr>
 </tbody></table>
 <hr>
@@ -228,214 +253,199 @@
 </tr></thead><tbody>
 <tr>
 <td>News Briefing</td>
-<td>`qwen3.5:9b`</td>
+<td><code>qwen3.5:9b</code></td>
 <td>Needs large context window for 50-100 article list</td>
 </tr>
 <tr>
 <td>YouTube Analysis</td>
-<td>`gemma4:e2b`</td>
+<td><code>gemma4:e2b</code></td>
 <td>Shorter transcripts; fast cold-start (~2 min)</td>
 </tr>
 <tr>
 <td>Podcast Analysis</td>
-<td>`gemma4:e2b`</td>
+<td><code>gemma4:e2b</code></td>
 <td>Same as YouTube</td>
 </tr>
 <tr>
 <td>Email summarization</td>
-<td>`gemma4:e2b`</td>
+<td><code>gemma4:e2b</code></td>
 <td>Inline article summaries, short context</td>
 </tr>
 </tbody></table>
-<p>OpenRouter is a runtime override for any pipeline: `LLM_PROVIDER=openrouter LLM_MODEL=<model> ./_scripts/process_youtube.sh "<URL>"`</p>
+<p>OpenRouter is a runtime override for any pipeline: <code>LLM_PROVIDER=openrouter LLM_MODEL=&lt;model&gt; ./_scripts/process_youtube.sh &quot;&lt;URL&gt;&quot;</code></p>
 <hr>
 <h2>Pipeline 1: News Briefing</h2>
-<p><strong>File:</strong> `_scripts/generate_report.py` — runs hourly via cron</p>
+<p><strong>File:</strong> <code>_scripts/generate_report.py</code> — runs hourly via cron</p>
 <p><strong>Inputs:</strong></p>
 <ul>
-<li>RSS articles from DynamoDB (written by `poll_feeds.py` every 10 min)</li>
+<li>RSS articles from DynamoDB (written by <code>poll_feeds.py</code> every 10 min)</li>
 <li>Brave News API — 7 hardcoded topic queries, 5 results each, freshness: past day</li>
 <li>Last 10 analysis texts from S3 (history context to prevent repeating trends)</li>
 </ul>
 <p><strong>Process:</strong></p>
 <ol>
-<li>Load unread RSS articles (`fetched_at >= now-24h`, `reported_at` not set)</li>
+<li>Load unread RSS articles (<code>fetched_at &gt;= now-24h</code>, <code>reported_at</code> not set)</li>
 <li>Fetch Brave News articles not seen before (deduplicated via local SQLite, 7-day window)</li>
-<li>Merge into a single numbered list `[1]...[N]` — RSS first, then Brave</li>
-<li>Send full list to `qwen3.5:9b` with analysis prompt</li>
-<li>Validate output: strip any bullet whose `[N]` citations don't appear in the article index (hallucination filter)</li>
+<li>Merge into a single numbered list <code>[1]...[N]</code> — RSS first, then Brave</li>
+<li>Send full list to <code>qwen3.5:9b</code> with analysis prompt</li>
+<li>Validate output: strip any bullet whose <code>[N]</code> citations don't appear in the article index (hallucination filter)</li>
 <li>Write markdown report, upload to S3, index in DynamoDB, send HTML email</li>
-<li>Mark all articles as `reported_at = now`</li>
-<li>Git commit + push the new `.md` file; keep only latest 5 locally</li>
+<li>Mark all articles as <code>reported_at = now</code></li>
+<li>Git commit + push the new <code>.md</code> file; keep only latest 5 locally</li>
 </ol>
 <p><strong>LLM prompt rules enforced:</strong></p>
 <ul>
-<li>Every bullet must begin with `[N]` citation(s)</li>
-<li>Topics grouped under `<strong>bold headers</strong>` (e.g. `<strong>AI & Technology</strong>`)</li>
+<li>Every bullet must begin with <code>[N]</code> citation(s)</li>
+<li>Topics grouped under <code>&lt;strong&gt;bold headers&lt;/strong&gt;</code> (e.g. <code>&lt;strong&gt;AI &amp; Technology&lt;/strong&gt;</code>)</li>
 <li>Each group: 2-4 context sentences, then bullets</li>
 <li>Bullets: 30-50 words — key fact + detail + implication</li>
 <li>Do not invent topics not supported by the article list</li>
 </ul>
 <p><strong>Output format:</strong></p>
-<p>```</p>
-<h1>Daily News Briefing — Month DD, YYYY HH:MM</h1>
-<h2>Analysis & Trends to Watch</h2>
-<p>[grouped analysis with [N] citations]</p>
-<hr>
-<h2>Brave News (N articles)</h2>
-<p>[per-topic tables: title | link]</p>
-<hr>
-<h2>RSS Feeds (N articles)</h2>
-<p>[per-feed tables: title | published | link]</p>
-<p>```</p>
+<pre><code># Daily News Briefing — Month DD, YYYY HH:MM
+
+## Analysis &amp; Trends to Watch
+[grouped analysis with [N] citations]
+
+---
+
+## Brave News (N articles)
+[per-topic tables: title | link]
+
+---
+
+## RSS Feeds (N articles)
+[per-feed tables: title | published | link]</code></pre>
 <p><strong>S3 layout:</strong></p>
-<p>```</p>
-<p>reports/news-briefings/filename.md</p>
-<p>transcripts/news-briefings/YYYY/MM/filename.txt   ← analysis text only</p>
-<p>articles/news-briefings/YYYY/MM/filename.json      ← full article index</p>
-<p>```</p>
+<pre><code>reports/news-briefings/filename.md
+transcripts/news-briefings/YYYY/MM/filename.txt   ← analysis text only
+articles/news-briefings/YYYY/MM/filename.json      ← full article index</code></pre>
 <hr>
 <h2>Pipeline 2: YouTube Analyzer</h2>
-<p><strong>File:</strong> `_scripts/process_youtube.sh` — triggered by URL drop (Telegram or email)</p>
-<p><strong>Inputs:</strong> YouTube URL. Optional: `--music-video` flag routes to music catalog instead.</p>
+<p><strong>File:</strong> <code>_scripts/process_youtube.sh</code> — triggered by URL drop (Telegram or email)</p>
+<p><strong>Inputs:</strong> YouTube URL. Optional: <code>--music-video</code> flag routes to music catalog instead.</p>
 <p><strong>Process:</strong></p>
 <ol>
-<li>Get video title via `yt-dlp --print "%(title)s"`</li>
+<li>Get video title via <code>yt-dlp --print &quot;%(title)s&quot;</code></li>
 <li>Try to download auto-generated English VTT subtitles — strip timing/tags, deduplicate repeated lines</li>
-<li>If no subtitles: download audio, run Whisper (`base` model, CPU)</li>
-<li>Send cleaned transcript to `gemma4:e2b` with structured output prompt</li>
+<li>If no subtitles: download audio, run Whisper (<code>base</code> model, CPU)</li>
+<li>Send cleaned transcript to <code>gemma4:e2b</code> with structured output prompt</li>
 <li>Fallback chain: Ollama → OpenRouter → save raw transcript (never lose data)</li>
-<li>Upload analysis `.md` + raw transcript to S3, index in DynamoDB, git commit, send HTML email</li>
+<li>Upload analysis <code>.md</code> + raw transcript to S3, index in DynamoDB, git commit, send HTML email</li>
 </ol>
 <p><strong>Prompt uses assistant prefill</strong> to force the model to start from the right heading rather than adding meta-commentary.</p>
 <p><strong>Output format:</strong></p>
-<p>```</p>
-<h1>Video Title</h1>
-<h2>Summary & Key Takeaways</h2>
-<ul>
-<li>4-6 bullets</li>
-</ul>
-<h2>Detailed Notes</h2>
-<p>[### subheadings, - bullets, <strong>bold key terms</strong>]</p>
-<p>```</p>
+<pre><code># Video Title
+
+## Summary &amp; Key Takeaways
+- 4-6 bullets
+
+## Detailed Notes
+[### subheadings, - bullets, **bold key terms**]</code></pre>
 <p><strong>S3 layout:</strong></p>
-<p>```</p>
-<p>reports/youtube/safe_title.md</p>
-<p>transcripts/youtube/YYYY/MM/safe_title.txt</p>
-<p>```</p>
+<pre><code>reports/youtube/safe_title.md
+transcripts/youtube/YYYY/MM/safe_title.txt</code></pre>
 <hr>
 <h2>Pipeline 3: Podcast Transcriber</h2>
-<p><strong>File:</strong> `_scripts/process_podcast.sh` — triggered manually or by `check_podcasts.py` (daily 4am)</p>
-<p><strong>Inputs:</strong> Podcast URL (Apple Podcasts, direct `.mp3`/`.m4a`, or RSS enclosure). Optional env vars: `PODCAST_NAME`, `EPISODE_TITLE` (set by the feed monitor for clean titles).</p>
+<p><strong>File:</strong> <code>_scripts/process_podcast.sh</code> — triggered manually or by <code>check_podcasts.py</code> (daily 4am)</p>
+<p><strong>Inputs:</strong> Podcast URL (Apple Podcasts, direct <code>.mp3</code>/<code>.m4a</code>, or RSS enclosure). Optional env vars: <code>PODCAST_NAME</code>, <code>EPISODE_TITLE</code> (set by the feed monitor for clean titles).</p>
 <p><strong>Process:</strong></p>
 <ol>
-<li>Get episode title (from env vars if set, else `yt-dlp --print`)</li>
-<li>Download audio: `yt-dlp -x --audio-format mp3`</li>
-<li>Transcribe: `whisper --model base --device cpu` (~4-5 min per 40-min episode)</li>
-<li>Send transcript to `gemma4:e2b` with editorial analysis prompt (not a reformat — extract themes, arguments, significance)</li>
+<li>Get episode title (from env vars if set, else <code>yt-dlp --print</code>)</li>
+<li>Download audio: <code>yt-dlp -x --audio-format mp3</code></li>
+<li>Transcribe: <code>whisper --model base --device cpu</code> (~4-5 min per 40-min episode)</li>
+<li>Send transcript to <code>gemma4:e2b</code> with editorial analysis prompt (not a reformat — extract themes, arguments, significance)</li>
 <li>Fallback chain: Ollama → OpenRouter → save raw transcript</li>
 <li>Upload to S3, index in DynamoDB, git commit, send HTML email</li>
 </ol>
 <p><strong>Output format:</strong></p>
-<p>```</p>
-<h1>Show Name — Episode Title</h1>
-<h2>Executive Summary</h2>
-<p>[2-3 paragraph narrative]</p>
-<h2>Key Themes & Arguments</h2>
-<h3>Theme Name</h3>
-<ul>
-<li>bullet</li>
-</ul>
-<h2>Notable Quotes</h2>
-<ul>
-<li>"quote" — Speaker</li>
-</ul>
-<h2>Context & Background</h2>
-<p>[why this topic matters now]</p>
-<h2>Key Takeaways</h2>
-<ul>
-<li>5-7 bullets</li>
-</ul>
-<p>```</p>
+<pre><code># Show Name — Episode Title
+
+## Executive Summary
+[2-3 paragraph narrative]
+
+## Key Themes &amp; Arguments
+### Theme Name
+- bullet
+
+## Notable Quotes
+- &quot;quote&quot; — Speaker
+
+## Context &amp; Background
+[why this topic matters now]
+
+## Key Takeaways
+- 5-7 bullets</code></pre>
 <p><strong>S3 layout:</strong></p>
-<p>```</p>
-<p>reports/podcasts/safe_title.md</p>
-<p>transcripts/podcasts/YYYY/MM/safe_title.txt</p>
-<p>```</p>
+<pre><code>reports/podcasts/safe_title.md
+transcripts/podcasts/YYYY/MM/safe_title.txt</code></pre>
 <hr>
 <h2>Shared Infrastructure</h2>
 <h3>DynamoDB — reports table</h3>
-<p>```</p>
-<p>PK (String): category</p>
-<p>Values: "news-briefings" | "youtube" | "podcasts" | "music-video"</p>
-<p>SK (String): "YYYY-MM-DDTHH:MM:SSZ#filename.md"</p>
-<p>Fields: s3_key, title, date</p>
-<p>```</p>
+<pre><code>PK (String): category
+  Values: &quot;news-briefings&quot; | &quot;youtube&quot; | &quot;podcasts&quot; | &quot;music-video&quot;
+
+SK (String): &quot;YYYY-MM-DDTHH:MM:SSZ#filename.md&quot;
+
+Fields: s3_key, title, date</code></pre>
 <h3>DynamoDB — RSS table</h3>
-<p>```</p>
-<p>PK (String): feed     (feed name, e.g. "Hacker News")</p>
-<p>SK (String): url_hash or timestamp-based key</p>
-<p>Fields: link, title, pub_date, description, fetched_at, reported_at</p>
-<p>```</p>
+<pre><code>PK (String): feed     (feed name, e.g. &quot;Hacker News&quot;)
+SK (String): url_hash or timestamp-based key
+
+Fields: link, title, pub_date, description, fetched_at, reported_at</code></pre>
 <h3>RSS poller</h3>
-<p>`_scripts/poll_feeds.py` — runs every 10 min, reads `_config/rss_feeds.json`, writes new articles to the RSS DynamoDB table. The briefing generator reads from DDB, not feeds directly.</p>
+<p><code>_scripts/poll_feeds.py</code> — runs every 10 min, reads <code>_config/rss_feeds.json</code>, writes new articles to the RSS DynamoDB table. The briefing generator reads from DDB, not feeds directly.</p>
 <h3>Email & URL router</h3>
-<p>`_scripts/check_email.py` — runs every 5 min, polls Gmail via IMAP, routes URLs:</p>
+<p><code>_scripts/check_email.py</code> — runs every 5 min, polls Gmail via IMAP, routes URLs:</p>
 <table><thead><tr>
 <th>URL pattern</th>
 <th>Handler</th>
 </tr></thead><tbody>
 <tr>
-<td>`youtube.com` / `youtu.be`</td>
-<td>`process_youtube.sh`</td>
+<td><code>youtube.com</code> / <code>youtu.be</code></td>
+<td><code>process_youtube.sh</code></td>
 </tr>
 <tr>
-<td>`youtube.com` + `--music-video`</td>
+<td><code>youtube.com</code> + <code>--music-video</code></td>
 <td>music catalog branch</td>
 </tr>
 <tr>
-<td>`podcasts.apple.com` or audio extension</td>
-<td>`process_podcast.sh`</td>
+<td><code>podcasts.apple.com</code> or audio extension</td>
+<td><code>process_podcast.sh</code></td>
 </tr>
 <tr>
 <td>any other URL</td>
-<td>inline Ollama summary via `gemma4:e2b`</td>
+<td>inline Ollama summary via <code>gemma4:e2b</code></td>
 </tr>
 </tbody></table>
 <h3>Podcast feed monitor</h3>
-<p>`_scripts/check_podcasts.py` — daily 4am, polls `_config/podcast_subscriptions.json`, routes new episodes to `process_podcast.sh` with `PODCAST_NAME` + `EPISODE_TITLE` set.</p>
+<p><code>_scripts/check_podcasts.py</code> — daily 4am, polls <code>_config/podcast_subscriptions.json</code>, routes new episodes to <code>process_podcast.sh</code> with <code>PODCAST_NAME</code> + <code>EPISODE_TITLE</code> set.</p>
 <h3>Cron schedule</h3>
-<p>```</p>
-<p>*/5 * * * *   check_email.py</p>
-<p>*/10 * * * *  poll_feeds.py</p>
-<p>0 * * * *     generate_report.py</p>
-<p>0 * * * *     email_metrics_report.py</p>
-<ul>
-<li>* * * *     collect_metrics.py</li>
-</ul>
-<p>0 4 * * *     check_podcasts.py</p>
-<p>0 8 * * *     alerts_cron.py   ← KBBL alerts (separate service)</p>
-<p>```</p>
+<pre><code>*/5 * * * *   check_email.py
+*/10 * * * *  poll_feeds.py
+0 * * * *     generate_report.py
+0 * * * *     email_metrics_report.py
+* * * * *     collect_metrics.py
+0 4 * * *     check_podcasts.py
+0 8 * * *     alerts_cron.py   ← KBBL alerts (separate service)</code></pre>
 <hr>
 <h2>Environment Variables</h2>
-<p>```bash</p>
-<p>EMAIL_ADDRESS=<gmail address for the bot inbox></p>
-<p>EMAIL_APP_PASSWORD=<gmail app password></p>
-<p>MY_EMAIL=<destination email for all output></p>
-<p>TELEGRAM_BOT_TOKEN=<telegram bot token></p>
-<p>TELEGRAM_CHAT_ID=<telegram chat id></p>
-<p>BRAVE_API=<brave search api key></p>
-<p>OPENROUTER=<openrouter api key></p>
-<p>AWS_DEFAULT_REGION=us-east-1</p>
-<p>```</p>
-<p>AWS credentials live in `~/.aws/credentials` (standard profile). All scripts assume `us-east-1` unless noted.</p>
+<pre><code>EMAIL_ADDRESS=&lt;gmail address for the bot inbox&gt;
+EMAIL_APP_PASSWORD=&lt;gmail app password&gt;
+MY_EMAIL=&lt;destination email for all output&gt;
+TELEGRAM_BOT_TOKEN=&lt;telegram bot token&gt;
+TELEGRAM_CHAT_ID=&lt;telegram chat id&gt;
+BRAVE_API=&lt;brave search api key&gt;
+OPENROUTER=&lt;openrouter api key&gt;
+AWS_DEFAULT_REGION=us-east-1</code></pre>
+<p>AWS credentials live in <code>~/.aws/credentials</code> (standard profile). All scripts assume <code>us-east-1</code> unless noted.</p>
 <hr>
 <h2>Key Design Decisions</h2>
-<p><strong>Whisper must be CPU-only.</strong> The GPU runs Ollama full-time. Running both on GPU causes OOM. Flag: `--device cpu`.</p>
-<p><strong>qwen3.5:9b is non-negotiable for the briefing.</strong> A full article list (50-100 items) exceeds `gemma4:e2b`'s effective context. Smaller model hallucinates or truncates.</p>
-<p><strong>Citation validation is critical.</strong> Without the hallucination filter (strip bullets with out-of-range `[N]`), the model invents plausible-sounding but fabricated stories at ~1 in 10 runs.</p>
+<p><strong>Whisper must be CPU-only.</strong> The GPU runs Ollama full-time. Running both on GPU causes OOM. Flag: <code>--device cpu</code>.</p>
+<p><strong>qwen3.5:9b is non-negotiable for the briefing.</strong> A full article list (50-100 items) exceeds <code>gemma4:e2b</code>'s effective context. Smaller model hallucinates or truncates.</p>
+<p><strong>Citation validation is critical.</strong> Without the hallucination filter (strip bullets with out-of-range <code>[N]</code>), the model invents plausible-sounding but fabricated stories at ~1 in 10 runs.</p>
 <p><strong>History deduplication prevents stale analysis.</strong> The last 10 analysis texts are injected into the prompt. Without this, the same trends dominate the briefing for days.</p>
-<p><strong>Never lose a transcript.</strong> All three pipelines fall back to raw transcript on LLM failure rather than exiting with an error. The `.md` file is always written.</p>
+<p><strong>Never lose a transcript.</strong> All three pipelines fall back to raw transcript on LLM failure rather than exiting with an error. The <code>.md</code> file is always written.</p>
 <p><strong>Git is the delivery mechanism.</strong> Scripts auto-commit and push. The public repo updates on every run. This makes output accessible via GitHub Pages without a separate deployment step.</p>
     </main>
     <footer>Sector 7G Automated Intelligence System</footer>

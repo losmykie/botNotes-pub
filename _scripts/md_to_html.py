@@ -162,6 +162,31 @@ HTML_TEMPLATE = """\
             margin-bottom: 16px;
         }}
 
+        pre {{
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }}
+
+        pre code {{
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #374151;
+        }}
+
+        code {{
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 13px;
+            background: #F3F4F6;
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: #111827;
+        }}
+
         footer {{
             text-align: center;
             font-size: 12px;
@@ -191,10 +216,14 @@ HTML_TEMPLATE = """\
 
 
 def inline_fmt(text: str) -> str:
+    import html as _html
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
     text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
-    # italic: single *, not part of ** or list bullet
     text = re.sub(r'(?<!\*)\*(?!\s)(.+?)(?<!\s)\*(?!\*)', r'<em>\1</em>', text)
+    # inline code: `text`
+    def code_repl(m):
+        return f'<code>{_html.escape(m.group(1))}</code>'
+    text = re.sub(r'`([^`]+)`', code_repl, text)
     return text
 
 
@@ -206,6 +235,8 @@ def convert_md(md: str) -> tuple:
     list_tag = ''
     in_table = False
     table_head_done = False
+    in_code = False
+    code_lines = []
 
     def close_list():
         nonlocal in_list, list_tag
@@ -221,8 +252,32 @@ def convert_md(md: str) -> tuple:
             in_table = False
             table_head_done = False
 
+    def close_code():
+        nonlocal in_code, code_lines
+        if in_code:
+            import html as _html
+            body = _html.escape('\n'.join(code_lines))
+            out.append(f'<pre><code>{body}</code></pre>')
+            in_code = False
+            code_lines = []
+
     for line in lines:
         s = line.strip()
+
+        # Fenced code block toggle
+        if s.startswith('```'):
+            if in_code:
+                close_code()
+            else:
+                close_list()
+                close_table()
+                in_code = True
+                code_lines = []
+            continue
+
+        if in_code:
+            code_lines.append(line)
+            continue
 
         if not s:
             close_list()
@@ -321,6 +376,7 @@ def convert_md(md: str) -> tuple:
 
     close_list()
     close_table()
+    close_code()
     return title, '\n'.join(out)
 
 
