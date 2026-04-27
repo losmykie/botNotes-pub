@@ -4,9 +4,53 @@
 
 ---
 
-## What It Is
+## Architecture Overview
 
-A 24/7 automated intelligence system on a home Linux server. Three pipelines ingest content (news, YouTube, podcasts), analyze it with a local LLM, and deliver structured output via HTML email. All output is also stored in S3 and indexed in DynamoDB for a web dashboard.
+Three content pipelines feed into a shared cloud backend. Everything ingests locally, runs LLM analysis locally, then pushes output to AWS for email delivery, storage, and dashboard access.
+
+```
+ INPUTS                    LOCAL (Linux server)              CLOUD (AWS)
+ ─────────────────────     ───────────────────────────       ──────────────────────────
+ RSS Feeds (every 10m) ──► poll_feeds.py                ──► DynamoDB (article index)
+                                                          │
+ Brave News API        ──► generate_report.py            ├──► S3 (reports + transcripts)
+                           (qwen3.5:9b via Ollama)       ├──► DynamoDB (report index)
+                                                          └──► SES → Email
+ YouTube URL           ──► process_youtube.sh
+                           yt-dlp → subtitles/Whisper   ──► S3 → DDB → SES → Email
+                           gemma4:e2b via Ollama
+
+ Podcast URL           ──► process_podcast.sh
+                           yt-dlp → Whisper (CPU)        ──► S3 → DDB → SES → Email
+                           gemma4:e2b via Ollama
+
+ Email / Telegram      ──► check_email.py (router)
+                           routes URLs to above scripts
+
+ Podcast RSS feeds     ──► check_podcasts.py (monitor)
+                           auto-dispatches new episodes
+```
+
+**How it ties together:**
+
+- All pipelines share one S3 bucket and one DynamoDB table (`category` + `timestamp#filename` key structure)
+- The dashboard (separate service) reads that DynamoDB table to list reports, then fetches `.md` files from S3 for display
+- Scripts auto-commit output files to this git repo on every run — GitHub Pages serves them publicly
+- Cron on the local server drives all scheduling — no Lambda triggers, no event-driven cloud infrastructure
+- Ollama runs persistently on the local machine; Whisper is invoked per-job with `--device cpu` (GPU stays with Ollama)
+- OpenRouter is a fallback only — if Ollama is unavailable, any pipeline can route through OpenRouter at runtime
+
+**What runs where:**
+
+| Component | Runs on | Persists to |
+|---|---|---|
+| LLM inference | Local (Ollama) | — |
+| Audio transcription | Local (Whisper CPU) | — |
+| Report `.md` files | Local → git | GitHub (public) |
+| Reports + transcripts | — | S3 |
+| Report index | — | DynamoDB |
+| Email delivery | — | SES |
+| Dashboard | AWS Lambda | — |
 
 ---
 

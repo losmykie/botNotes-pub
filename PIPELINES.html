@@ -203,8 +203,79 @@
         <h1>botNotes Pipeline Specification</h1>
 <blockquote><p>Context file for AI agents. Describes what exists, how it's wired, and why — enough to recreate it from scratch.</p></blockquote>
 <hr>
-<h2>What It Is</h2>
-<p>A 24/7 automated intelligence system on a home Linux server. Three pipelines ingest content (news, YouTube, podcasts), analyze it with a local LLM, and deliver structured output via HTML email. All output is also stored in S3 and indexed in DynamoDB for a web dashboard.</p>
+<h2>Architecture Overview</h2>
+<p>Three content pipelines feed into a shared cloud backend. Everything ingests locally, runs LLM analysis locally, then pushes output to AWS for email delivery, storage, and dashboard access.</p>
+<pre><code> INPUTS                    LOCAL (Linux server)              CLOUD (AWS)
+ ─────────────────────     ───────────────────────────       ──────────────────────────
+ RSS Feeds (every 10m) ──► poll_feeds.py                ──► DynamoDB (article index)
+                                                          │
+ Brave News API        ──► generate_report.py            ├──► S3 (reports + transcripts)
+                           (qwen3.5:9b via Ollama)       ├──► DynamoDB (report index)
+                                                          └──► SES → Email
+ YouTube URL           ──► process_youtube.sh
+                           yt-dlp → subtitles/Whisper   ──► S3 → DDB → SES → Email
+                           gemma4:e2b via Ollama
+
+ Podcast URL           ──► process_podcast.sh
+                           yt-dlp → Whisper (CPU)        ──► S3 → DDB → SES → Email
+                           gemma4:e2b via Ollama
+
+ Email / Telegram      ──► check_email.py (router)
+                           routes URLs to above scripts
+
+ Podcast RSS feeds     ──► check_podcasts.py (monitor)
+                           auto-dispatches new episodes</code></pre>
+<p><strong>How it ties together:</strong></p>
+<ul>
+<li>All pipelines share one S3 bucket and one DynamoDB table (<code>category</code> + <code>timestamp#filename</code> key structure)</li>
+<li>The dashboard (separate service) reads that DynamoDB table to list reports, then fetches <code>.md</code> files from S3 for display</li>
+<li>Scripts auto-commit output files to this git repo on every run — GitHub Pages serves them publicly</li>
+<li>Cron on the local server drives all scheduling — no Lambda triggers, no event-driven cloud infrastructure</li>
+<li>Ollama runs persistently on the local machine; Whisper is invoked per-job with <code>--device cpu</code> (GPU stays with Ollama)</li>
+<li>OpenRouter is a fallback only — if Ollama is unavailable, any pipeline can route through OpenRouter at runtime</li>
+</ul>
+<p><strong>What runs where:</strong></p>
+<table><thead><tr>
+<th>Component</th>
+<th>Runs on</th>
+<th>Persists to</th>
+</tr></thead><tbody>
+<tr>
+<td>LLM inference</td>
+<td>Local (Ollama)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Audio transcription</td>
+<td>Local (Whisper CPU)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Report <code>.md</code> files</td>
+<td>Local → git</td>
+<td>GitHub (public)</td>
+</tr>
+<tr>
+<td>Reports + transcripts</td>
+<td>—</td>
+<td>S3</td>
+</tr>
+<tr>
+<td>Report index</td>
+<td>—</td>
+<td>DynamoDB</td>
+</tr>
+<tr>
+<td>Email delivery</td>
+<td>—</td>
+<td>SES</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>AWS Lambda</td>
+<td>—</td>
+</tr>
+</tbody></table>
 <hr>
 <h2>Stack</h2>
 <table><thead><tr>
