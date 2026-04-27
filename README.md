@@ -449,28 +449,30 @@ LLM_PROVIDER=openrouter LLM_MODEL=deepseek/deepseek-v3.2 ./_scripts/process_yout
 
 ## Recent Reports
 
-Each item links to the styled HTML version. Raw markdown is also available alongside each file.
+Each item links to the styled HTML version (rendered via GitHub Pages). Raw markdown is also available alongside each file.
+
+**Pipeline guide:** [PIPELINES.html](https://losmykie.github.io/botNotes-pub/PIPELINES.html) — zero to MVP for all three pipelines.
 
 ### News Briefings
-- [Daily News Briefing — April 25, 2026 10:46](_reports/Daily_News_Briefing_April_25_2026_1046.html)
-- [Daily News Briefing — April 25, 2026 10:45](_reports/Daily_News_Briefing_April_25_2026_1045.html)
-- [Daily News Briefing — April 25, 2026 10:00](_reports/Daily_News_Briefing_April_25_2026_1000.html)
-- [Daily News Briefing — April 25, 2026 09:00](_reports/Daily_News_Briefing_April_25_2026_0900.html)
-- [Daily News Briefing — April 25, 2026 08:00](_reports/Daily_News_Briefing_April_25_2026_0800.html)
+- [Daily News Briefing — April 25, 2026 10:46](https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1046.html)
+- [Daily News Briefing — April 25, 2026 10:45](https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1045.html)
+- [Daily News Briefing — April 25, 2026 10:00](https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_1000.html)
+- [Daily News Briefing — April 25, 2026 09:00](https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0900.html)
+- [Daily News Briefing — April 25, 2026 08:00](https://losmykie.github.io/botNotes-pub/_reports/Daily_News_Briefing_April_25_2026_0800.html)
 
 ### YouTube Analyses
-- [TheQuartering: YouTube's Worst Content Creator](_media/youtube/TheQuartering_YouTube_s_Worst_Content_Creator.html)
-- [The Most Dangerous AI Got Hacked](_media/youtube/The_Most_Dangerous_AI_Got_Hacked.html)
-- [Why does bias exist in AI models?](_media/youtube/Why_does_bias_exist_in_AI_models.html)
-- [Open source is dead now](_media/youtube/Open_source_is_dead_now.html)
-- [Should you let OpenClaw pen test your system? Plus Cybersecurity for ephemeral software](_media/youtube/Should_you_let_OpenClaw_pen_test_your_system_Plus_Cybersecurity_for_ephemeral_software.html)
+- [TheQuartering: YouTube's Worst Content Creator](https://losmykie.github.io/botNotes-pub/_media/youtube/TheQuartering_YouTube_s_Worst_Content_Creator.html)
+- [The Most Dangerous AI Got Hacked](https://losmykie.github.io/botNotes-pub/_media/youtube/The_Most_Dangerous_AI_Got_Hacked.html)
+- [Why does bias exist in AI models?](https://losmykie.github.io/botNotes-pub/_media/youtube/Why_does_bias_exist_in_AI_models.html)
+- [Open source is dead now](https://losmykie.github.io/botNotes-pub/_media/youtube/Open_source_is_dead_now.html)
+- [Should you let OpenClaw pen test your system? Plus Cybersecurity for ephemeral software](https://losmykie.github.io/botNotes-pub/_media/youtube/Should_you_let_OpenClaw_pen_test_your_system_Plus_Cybersecurity_for_ephemeral_software.html)
 
 ### Podcast Notes
-- [Trump's View of the War](_media/podcasts/Trump_s_View_of_the_War.html)
-- [Trump Loses the Gerrymander War](_media/podcasts/Trump_Loses_the_Gerrymander_War.html)
-- [Intel Delivers Strong AI-Fueled Outlook](_media/podcasts/Intel_Delivers_Strong_AI_Fueled_Outlook.html)
-- [Women Lose Significant Bone Density During Menopause](_media/podcasts/Women_Lose_Significant_Bone_Density_During_Menopause.html)
-- [DOJ Drops Powell Probe, Smoothing Path for Warsh to Lead Fed](_media/podcasts/DOJ_Drops_Powell_Probe_Smoothing_Path_for_Warsh_to_Lead_Fed.html)
+- [Trump's View of the War](https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_s_View_of_the_War.html)
+- [Trump Loses the Gerrymander War](https://losmykie.github.io/botNotes-pub/_media/podcasts/Trump_Loses_the_Gerrymander_War.html)
+- [Intel Delivers Strong AI-Fueled Outlook](https://losmykie.github.io/botNotes-pub/_media/podcasts/Intel_Delivers_Strong_AI_Fueled_Outlook.html)
+- [Women Lose Significant Bone Density During Menopause](https://losmykie.github.io/botNotes-pub/_media/podcasts/Women_Lose_Significant_Bone_Density_During_Menopause.html)
+- [DOJ Drops Powell Probe, Smoothing Path for Warsh to Lead Fed](https://losmykie.github.io/botNotes-pub/_media/podcasts/DOJ_Drops_Powell_Probe_Smoothing_Path_for_Warsh_to_Lead_Fed.html)
 
 ---
 
