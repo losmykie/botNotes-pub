@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open source is dead now?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #111827;
+            background: #FFFFFF;
+        }
+
+        header {
+            background: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .brand .accent { color: #8CE4FF; }
+
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 48px 24px 96px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: #111827;
+            margin-top: 40px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8CE4FF;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111827;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        p {
+            color: #374151;
+            margin-bottom: 14px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E5E7EB;
+            margin: 32px 0;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 14px;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #111827;
+            text-decoration-color: #8CE4FF;
+            text-underline-offset: 3px;
+        }
+
+        a:hover { color: #6B7280; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #E5E7EB;
+        }
+
+        th {
+            background: #F9FAFB;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #E5E7EB;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        strong { font-weight: 600; color: #111827; }
+        em { font-style: italic; color: #6B7280; }
+
+        blockquote {
+            border-left: 3px solid #E5E7EB;
+            padding: 4px 16px;
+            color: #6B7280;
+            font-style: italic;
+            margin: 14px 0;
+        }
+
+        .callout {
+            background: #F9FAFB;
+            border-left: 3px solid #8CE4FF;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #9CA3AF;
+            padding: 32px 24px;
+            border-top: 1px solid #E5E7EB;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 640px) {
+            main { padding: 32px 16px 64px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="brand">&#9889; SECTOR <span class="accent">7G</span></span>
+    </header>
+    <main>
+        <h1>Open source is dead now?</h1>
+<h2>Summary & Key Takeaways</h2>
+<ul>
+<li>The speaker is a stronger advocate for <strong>open source</strong> and the importance of supporting open source communities and building systems that can build on top of each other.</li>
+<li>The speaker is concerned about the possibility of <strong>open source</strong> being shut down, citing the example of <strong>Cal.com</strong> closing its source code.</li>
+<li>The rise of <strong>AI</strong> has fundamentally altered the security landscape, making transparency a risk, and this is driving some entities to close core codebases.</li>
+<li>The interaction between <strong>AI</strong> and security research is changing the landscape, potentially lowering the barrier for finding exploits, which is scary.</li>
+<li>The future of security may involve a system where <strong>cybersecurity</strong> is framed as <strong>proof of work</strong>, requiring spending more tokens to find exploits.</li>
+</ul>
+<h2>Detailed Notes</h2>
+<h3>The Cal.com Example</h3>
+<ul>
+<li><strong>Cal.com</strong> is an open-source alternative to Calendarly, and it is no longer open source.</li>
+<li><strong>Cal.com</strong> is cited as an example of a good <strong>full-stack TypeScript</strong> application and a leading example of a big <strong>open-source fullstack TypeScript next app</strong>.</li>
+<li>The speaker expresses fear that closing the source code of such projects might doom the future of software.</li>
+<li>The speaker has discussed this issue with the <strong>Cal.com</strong> team and has failed to prevent the change.</li>
+</ul>
+<h3>The Shift in Security and AI</h3>
+<ul>
+<li><strong>AI</strong> has fundamentally altered the security landscape by allowing security tasks to be automated at scale.</li>
+<li>Code is no longer just read; it is scanned, mapped, and exploited at near zero cost, making transparency a risk at scale.</li>
+<li>The decision to close the <strong>corec.com</strong> codebase is framed as a response to the risks <strong>AI</strong> is making possible, not a rejection of <strong>open source</strong>.</li>
+<li>The speaker points to <strong>Project Glass Wing</strong> as something worth considering in this context.</li>
+</ul>
+<h3>The Role of Domain Knowledge and AI</h3>
+<ul>
+<li>Finding exploits requires both <strong>security knowledge</strong> and <strong>domain-specific knowledge</strong>.</li>
+<li>Historically, the lack of knowledge in one area (like full-stack TypeScript) meant that open source didn't meaningfully change the average security researcher's capability in that domain.</li>
+<li><strong>AI</strong> can now bridge this gap: it can understand the domain-specific stuff, meaning the barrier for finding exploits is shifting from requiring high domain knowledge to requiring more <strong>security knowledge</strong>.</li>
+<li>The speaker notes that the AI has made the amount of domain-specific knowledge hit a floor, and the only remaining blocker is <strong>security knowledge</strong>.</li>
+</ul>
+<h3>The Proof of Work in Cybersecurity</h3>
+<ul>
+<li>The speaker introduces the concept of <strong>cybersecurity</strong> looking like <strong>proof of work</strong>.</li>
+<li>This concept suggests that security requires spending more tokens to discover exploits than attackers spend trying to exploit them.</li>
+<li>This mirrors <strong>cryptocurrency's proof of work</strong>, where success is tied to raw computational work.</li>
+<li>The goal is to make attacking a service expensive by requiring real processing power to prove the work.</li>
+</ul>
+<h3>Open Source and Future Efforts</h3>
+<ul>
+<li>The speaker argues that <strong>open source</strong> remains critically important and needs to be supported.</li>
+<li><strong>Open source</strong> projects face an additional burden to deal with security reports, which is "thankless work."</li>
+<li>The speaker calls for companies to convince others that keeping things open is the right call going forward.</li>
+<li>The speaker suggests a three-phase cycle for agents: <strong>Development</strong>, <strong>Review</strong>, and <strong>Hardening</strong>, where human input limits the first phase and money limits the last.</li>
+<li>The final message is to keep fighting for <strong>open source</strong> and ensure that the tools we rely on remain secure, reliable, and great.</li>
+</ul>
+    </main>
+    <footer>Sector 7G Automated Intelligence System</footer>
+</body>
+</html>
